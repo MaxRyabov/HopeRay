@@ -109,7 +109,7 @@ jobs:
             targets: dmg,pkg
             
           - platform: ios
-            os: macos-15
+            os: macos-26
             aarch: universal
             filename: hiddify-ios
             targets: ipa
