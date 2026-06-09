@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  HopeRay AppStream Metadata
+  Place this file at: linux/packaging/myappid.appdata.xml
+-->
+<component type="desktop-application">
+  <id>app.hoperay.com</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>HopeRay</name>
+  <summary>Modern Proxy and VPN Manager for Linux</summary>
+
+  <developer_name>HopeRay</developer_name>
+  <!-- TODO(hoperay): set a real contact address -->
+  <update_contact>linux@hoperay.app</update_contact>
+
+  <description>
+    <p>
+      HopeRay is an advanced proxy and VPN client built for privacy and control.
+      It supports multiple backend protocols including V2Ray, Xray, Clash, and Sing-box,
+      providing flexibility and performance for all kinds of network configurations.
+    </p>
+    <p>
+      Designed with simplicity in mind, HopeRay helps users connect securely and
+      manage complex proxy configurations through a clean graphical interface.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">hoperay.desktop</launchable>
+
+  <icon type="stock">hoperay</icon>
+
+  <categories>
+    <category>Network</category>
+  </categories>
+
+  <keywords>
+    <keyword>HopeRay</keyword>
+    <keyword>Proxy</keyword>
+    <keyword>VPN</keyword>
+    <keyword>V2Ray</keyword>
+    <keyword>Xray</keyword>
+    <keyword>Psiphon</keyword>
+    <keyword>OpenVPN</keyword>
+  </keywords>
+
+  <mime-types>
+    <mime-type>x-scheme-handler/hoperay</mime-type>
+    <mime-type>x-scheme-handler/hiddify</mime-type>
+    <mime-type>x-scheme-handler/v2ray</mime-type>
+    <mime-type>x-scheme-handler/v2rayn</mime-type>
+    <mime-type>x-scheme-handler/v2rayng</mime-type>
+    <mime-type>x-scheme-handler/clash</mime-type>
+    <mime-type>x-scheme-handler/clashmeta</mime-type>
+    <mime-type>x-scheme-handler/sing-box</mime-type>
+  </mime-types>
+
+  <!-- TODO(hoperay): set real project URLs -->
+  <url type="homepage">https://hoperay.app</url>
+  <url type="bugtracker">https://github.com/hoperay-app/hoperay/issues</url>
+
+  <provides>
+    <binary>hoperay</binary>
+  </provides>
+
+  <releases>
+    <release version="1.0.0" date="2026-06-06">
+      <description>
+        <p>Initial Linux release of HopeRay with multi-protocol support and modern UI.</p>
+      </description>
+    </release>
+  </releases>
+
+  <translation type="gettext">hoperay</translation>
+
+  <custom>
+    <value key="PackageName">hoperay</value>
+    <value key="Priority">optional</value>
+    <value key="Section">x11</value>
+    <value key="InstalledSize">6604</value>
+    <value key="Essential">false</value>
+  </custom>
+</component>
