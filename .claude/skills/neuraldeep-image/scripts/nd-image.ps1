@@ -35,6 +35,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+# Windows PowerShell 5.1 defaults to TLS 1.0; the API requires 1.2. Harmless on PS 7+.
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 $Base = 'https://api.neuraldeep.ru/v1/images'
 
 # --- token ---
@@ -43,13 +45,51 @@ if (-not $token) { $token = [Environment]::GetEnvironmentVariable('NEURALDEEP_TO
 if (-not $token) { throw 'NEURALDEEP_TOKEN is not set (env var).' }
 $auth = @{ Authorization = "Bearer $token" }
 
-function Invoke-Json($Uri, $Method='Get', $Body=$null, $ContentType=$null, $Form=$null) {
+function Invoke-Json($Uri, $Method='Get', $Body=$null, $ContentType=$null) {
   $p = @{ Uri = $Uri; Headers = $auth; Method = $Method; TimeoutSec = 60 }
   if ($Body)        { $p.Body = $Body }
   if ($ContentType) { $p.ContentType = $ContentType }
-  if ($Form)        { $p.Form = $Form }
   try {
     return (Invoke-WebRequest @p).Content | ConvertFrom-Json
+  } catch {
+    $msg = $_.Exception.Message
+    if ($_.ErrorDetails.Message) { $msg += " :: " + $_.ErrorDetails.Message }
+    throw "API call failed ($Uri): $msg"
+  }
+}
+
+# Manual multipart/form-data upload. Invoke-WebRequest -Form is PowerShell 7+ only,
+# so we build the body bytes by hand to also work in Windows PowerShell 5.1.
+function Invoke-Multipart($Uri, $FilePath, $FieldName='image') {
+  $fileName  = [System.IO.Path]::GetFileName($FilePath)
+  $fileBytes = [System.IO.File]::ReadAllBytes($FilePath)
+  $boundary  = '----ndimage' + [guid]::NewGuid().ToString('N')
+  $crlf      = "`r`n"
+  $ctype     = switch ([System.IO.Path]::GetExtension($FilePath).ToLowerInvariant()) {
+    '.png'  { 'image/png' }
+    '.jpg'  { 'image/jpeg' }
+    '.jpeg' { 'image/jpeg' }
+    '.webp' { 'image/webp' }
+    default { 'application/octet-stream' }
+  }
+  $enc    = [System.Text.Encoding]::UTF8
+  $header = "--$boundary$crlf" +
+            "Content-Disposition: form-data; name=`"$FieldName`"; filename=`"$fileName`"$crlf" +
+            "Content-Type: $ctype$crlf$crlf"
+  $footer = "$crlf--$boundary--$crlf"
+  $ms = New-Object System.IO.MemoryStream
+  try {
+    $hb = $enc.GetBytes($header); $ms.Write($hb, 0, $hb.Length)
+    $ms.Write($fileBytes, 0, $fileBytes.Length)
+    $fb = $enc.GetBytes($footer); $ms.Write($fb, 0, $fb.Length)
+    $bodyBytes = $ms.ToArray()
+  } finally {
+    $ms.Dispose()
+  }
+  try {
+    return (Invoke-WebRequest -Uri $Uri -Headers $auth -Method Post `
+      -ContentType "multipart/form-data; boundary=$boundary" `
+      -Body $bodyBytes -TimeoutSec 60).Content | ConvertFrom-Json
   } catch {
     $msg = $_.Exception.Message
     if ($_.ErrorDetails.Message) { $msg += " :: " + $_.ErrorDetails.Message }
@@ -83,8 +123,7 @@ else {
     default     { throw "Unknown action: $Action" }
   }
   Write-Host "Processing ($Action) $Image ..." -ForegroundColor Cyan
-  $form = @{ image = Get-Item -Path $Image }
-  $job = Invoke-Json $endpoint 'Post' -Form $form
+  $job = Invoke-Multipart $endpoint $Image 'image'
 }
 
 $uid = $job.task_uid

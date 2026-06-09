@@ -5,8 +5,11 @@ import 'package:hiddify/utils/utils.dart';
 abstract class Constants {
   static const appName = "HopeRay";
   // TODO(hoperay): replace these placeholder URLs with the real HopeRay repo/site/support links.
-  // While they point to a non-existent repo, the in-app update checker (githubReleasesApiUrl /
-  // appCastUrl) simply fails gracefully — this intentionally disables pulling Hiddify releases.
+  // They point to a non-existent repo, which intentionally disables pulling Hiddify releases.
+  // Note: this is NOT fully silent — the desktop appcast path (appCastUrl) swallows the fetch
+  // failure, but a user-initiated "Check for update" (githubReleasesApiUrl) surfaces an error
+  // toast: DioHttpClient sets no validateStatus, so the 404 throws instead of reaching the
+  // graceful `statusCode != 200` branch in AppUpdateRepositoryImpl.
   static const githubUrl = "https://github.com/hoperay-app/hoperay";
   static const licenseUrl = "https://github.com/hoperay-app/hoperay?tab=License-1-ov-file#readme";
   static const githubReleasesApiUrl = "https://api.github.com/repos/hoperay-app/hoperay/releases";
