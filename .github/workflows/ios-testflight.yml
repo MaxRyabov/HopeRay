@@ -39,7 +39,12 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Prepare iOS (deps, codegen, native core)
+      - name: Setup dependencies (incl. fastforge)
+        run: |
+          make ios-install-deps
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+
+      - name: Prepare iOS (codegen, native core, pods)
         run: make ios-prepare
 
       - name: Build signed IPA
