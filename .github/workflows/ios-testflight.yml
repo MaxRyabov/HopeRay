@@ -1,0 +1,64 @@
+name: iOS TestFlight (manual)
+
+# Builds the signed iOS IPA and uploads it to TestFlight. Run manually from the
+# Actions tab. Faster than the full release (iOS only) — used to iterate on the
+# iOS signing/build. Needs the Apple secrets (cert, profiles, App Store API key).
+
+on:
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: '3.38.5'
+  CHANNEL: prod
+
+jobs:
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Import Apple distribution certificate
+        uses: apple-actions/import-codesign-certs@v6
+        with:
+          p12-file-base64: ${{ secrets.APPLE_CERTIFICATE_P12 }}
+          p12-password: ${{ secrets.APPLE_CERTIFICATE_P12_PASSWORD }}
+
+      - name: Install provisioning profiles
+        run: |
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "${{ secrets.APPLE_MOBILE_PROVISIONING_PROFILES_TARGZ_BASE64 }}" | base64 --decode | tar xz -C ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "Installed profiles:"; ls ~/Library/MobileDevice/Provisioning\ Profiles
+          security find-identity -v -p codesigning
+
+      - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2.21.0
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: Prepare iOS (deps, codegen, native core)
+        run: make ios-prepare
+
+      - name: Build signed IPA
+        env:
+          SENTRY_DSN: ''
+        run: make ios-release
+
+      - name: Locate IPA
+        id: ipa
+        run: |
+          IPA=$(find . -name '*.ipa' | head -1)
+          [ -n "$IPA" ] || { echo '::error::No .ipa was produced by the build'; exit 1; }
+          echo "path=$IPA" >> "$GITHUB_OUTPUT"
+          echo "Found IPA: $IPA"
+
+      - name: Upload to TestFlight
+        uses: Apple-Actions/upload-testflight-build@v4
+        with:
+          app-path: ${{ steps.ipa.outputs.path }}
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
