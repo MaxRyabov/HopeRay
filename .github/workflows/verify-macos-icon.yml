@@ -1,0 +1,59 @@
+name: Verify macOS app icon
+
+# Unsigned macOS build that compiles the app icon and uploads the rendered PNG,
+# so you can confirm the HopeRay lighthouse icon ships correctly. Requires NO
+# Apple Developer account and NO secrets. Run it manually from the Actions tab
+# (Run workflow) on any branch.
+
+on:
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: '3.38.5'
+
+jobs:
+  verify-icon:
+    runs-on: macos-15
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2.21.0
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: Prepare (deps, codegen, native core)
+        run: make macos-prepare
+
+      - name: Build macOS (ad-hoc signed, no certs needed)
+        run: flutter build macos --debug
+
+      - name: Extract compiled app icon
+        run: |
+          set -x
+          APP=$(find build/macos/Build/Products -maxdepth 2 -name '*.app' | head -1)
+          echo "Built app bundle: $APP"
+          mkdir -p icon_preview
+          cp brand/logo_master_1024.png icon_preview/source_master_1024.png 2>/dev/null || true
+          # prove the icon is wired into the bundle
+          /usr/libexec/PlistBuddy -c Print "$APP/Contents/Info.plist" 2>/dev/null | grep -i icon > icon_preview/info_icon_keys.txt || true
+          # the real compiled icon, converted to a viewable PNG
+          cp "$APP/Contents/Resources/AppIcon.icns" icon_preview/ 2>/dev/null || true
+          if [ -f icon_preview/AppIcon.icns ]; then
+            sips -s format png icon_preview/AppIcon.icns --out icon_preview/AppIcon.png
+          fi
+          echo "=== produced files ==="
+          ls -la icon_preview
+          echo "=== icon keys ==="
+          cat icon_preview/info_icon_keys.txt || true
+
+      - name: Upload icon preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-app-icon-preview
+          path: icon_preview/*
+          if-no-files-found: warn

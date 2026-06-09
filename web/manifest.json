@@ -1,11 +1,11 @@
 {
-    "name": "Hiddify",
-    "short_name": "Hiddify",
+    "name": "HopeRay",
+    "short_name": "HopeRay",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "Hiddify",
+    "background_color": "#0E1430",
+    "theme_color": "#0E1430",
+    "description": "HopeRay",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
