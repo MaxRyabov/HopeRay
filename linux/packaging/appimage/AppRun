@@ -19,8 +19,8 @@ install_integration() {
         REAL_HOME="$HOME"
     fi
 
-    APP_NAME="hiddify"
-    TARGET_DESKTOP="$REAL_HOME/.local/share/applications/hiddify.desktop"
+    APP_NAME="hoperay"
+    TARGET_DESKTOP="$REAL_HOME/.local/share/applications/hoperay.desktop"
     LOCAL_HICOLOR="$REAL_HOME/.local/share/icons/hicolor"
     
     if [ ! -f "$LOCAL_HICOLOR/index.theme" ]; then
@@ -32,18 +32,20 @@ install_integration() {
         fi
     fi
 
-    if [[ -f "./hiddify.png" ]]; then
+    ICON_SRC="./hoperay.png"
+    [ -f "$ICON_SRC" ] || ICON_SRC="./hiddify.png"
+    if [[ -f "$ICON_SRC" ]]; then
 
         mkdir -p "$LOCAL_HICOLOR/128x128/apps"
-        cp "./hiddify.png" "$LOCAL_HICOLOR/128x128/apps/hiddify.png"
+        cp "$ICON_SRC" "$LOCAL_HICOLOR/128x128/apps/hoperay.png"
         
         mkdir -p "$LOCAL_HICOLOR/256x256/apps"
-        cp "./hiddify.png" "$LOCAL_HICOLOR/256x256/apps/hiddify.png"
+        cp "$ICON_SRC" "$LOCAL_HICOLOR/256x256/apps/hoperay.png"
         
         gtk-update-icon-cache -f -t "$LOCAL_HICOLOR" 2>/dev/null || true
     fi
 
-    if [ -f "/usr/share/applications/hiddify.desktop" ]; then
+    if [ -f "/usr/share/applications/hoperay.desktop" ]; then
         return
     fi
 
@@ -52,11 +54,11 @@ install_integration() {
     cat > "$TARGET_DESKTOP" <<EOF
 [Desktop Entry]
 Type=Application
-Name=Hiddify
+Name=HopeRay
 Exec="$APPIMAGE"
-Icon=hiddify
+Icon=hoperay
 Terminal=false
-StartupWMClass=app.hiddify.com
+StartupWMClass=app.hoperay.com
 EOF
 
     chmod +x "$TARGET_DESKTOP"
