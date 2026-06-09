@@ -80,6 +80,7 @@ else {
     'remove-bg' { "$Base/background/remove" }
     'enhance'   { "$Base/enhance" }
     'avatar'    { "$Base/avatar" }
+    default     { throw "Unknown action: $Action" }
   }
   Write-Host "Processing ($Action) $Image ..." -ForegroundColor Cyan
   $form = @{ image = Get-Item -Path $Image }

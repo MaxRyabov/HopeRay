@@ -36,6 +36,7 @@ jobs:
         run: |
           set -x
           APP=$(find build/macos/Build/Products -maxdepth 2 -name '*.app' | head -1)
+          [ -n "$APP" ] || { echo "::error::No .app bundle found — macOS build may have failed"; exit 1; }
           echo "Built app bundle: $APP"
           mkdir -p icon_preview
           cp brand/logo_master_1024.png icon_preview/source_master_1024.png 2>/dev/null || true

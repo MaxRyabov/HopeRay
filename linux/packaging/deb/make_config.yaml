@@ -23,7 +23,7 @@ postinstall_scripts:
   - echo "HopeRay is ready to use :)"
 
 # Post-uninstallation tasks:
-# 1. Iterate through all user directories to remove Hiddify configuration and data
+# 1. Iterate through all user directories to remove HopeRay configuration and data
 # 2. Clean up root user data to ensure a clean removal
 postuninstall_scripts:
   - echo "Removing HopeRay user data..."
