@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:hiddify/core/localization/translations.dart';
+import 'package:hiddify/core/model/constants.dart';
 import 'package:hiddify/core/router/dialog/dialog_notifier.dart';
 import 'package:hiddify/features/profile/model/profile_entity.dart';
 import 'package:hiddify/features/profile/notifier/profile_notifier.dart';
@@ -15,21 +16,14 @@ class ProfileTileMain extends HookConsumerWidget {
 
   final ProfileEntity profile;
   final bool isMain;
-  static const verifiedDomains = [
-    'hiddify.com',
+  static const verifiedDomains = <String>[
     // 't.me',
     // 'telegram.me',
     // 'instagram.com',
     // 'x.com',
     // 'facebook.com',
   ];
-  static const verifiedLinks = [
-    'https://t.me/hiddify',
-    'https://t.me/hiddify_board',
-    'https://instagram.com/hiddify_com',
-    'https://x.com/hiddify_com',
-    'https://facebook.com/hiddify',
-  ];
+  static const verifiedLinks = [Constants.telegramChannelUrl];
   Future<void> _launchUrlWithCheck(BuildContext context, WidgetRef ref, String url) async {
     final uri = Uri.parse(url);
     final host = uri.host.toLowerCase();
