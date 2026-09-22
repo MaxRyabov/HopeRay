@@ -4,6 +4,7 @@
 - [ ] 1.2 `intro.banner` в `ru.i18n.json`: «Защищённый доступ к ресурсам вашей организации»
 - [ ] 1.3 `intro.banner` в ar, es, fa, fr, id, pt-BR, tr, zh-CN, zh-TW: перевод того же смысла
 - [ ] 1.4 `dart run slang`
+- [ ] 1.5 `intro_page.dart`: у текста баннера `maxLines: 2` вместо `1`
 
 ## 2. Метаданные
 
@@ -13,11 +14,11 @@
 
 ## 3. Тест словаря
 
-- [ ] 3.1 Добавить `test/core/localization/positioning_vocabulary_test.dart`: обход всех строк en и ru, кроме ключей с префиксами `pages.settings.chain.`, `dialogs.warpLicense.`, `errors.warp.`; проверка отсутствия подстрок из спеки
+- [ ] 3.1 Добавить `test/core/localization/positioning_vocabulary_test.dart`: обход всех строк en и ru, кроме ключей с префиксами `pages.settings.chain.`, `dialogs.warpLicense.`, `errors.warp.`; проверка отсутствия подстрок из спеки; тот же тест читает `app.hoperay.com.appdata.xml`, `deb/make_config.yaml`, `appimage/make_config.yaml` и проверяет отсутствие `Psiphon` и `OpenVPN`
 - [ ] 3.2 Если тест находит легитимные совпадения, либо поправить текст, либо добавить ключ в исключения с комментарием, почему он допустим
 
 ## 4. Проверка
 
 - [ ] 4.1 CI зелёный: шаг `flutter analyze` (без ошибок) и `flutter test`
-- [ ] 4.2 Вручную: интро на ru и en показывает новый баннер
+- [ ] 4.2 Вручную: интро на ru и en показывает новый баннер; на ширине 360 dp баннер в en, ru, fr, es, pt-BR виден целиком
 - [ ] 4.3 Баннер в 9 остальных локалях проверить обратным переводом (или носителем): смысл «защищённый доступ к ресурсам организации», без «свободного интернета»

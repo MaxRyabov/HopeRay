@@ -17,10 +17,10 @@
 
 - [ ] 3.0 Завести `test/helpers/pump_app.dart`: `pumpApp(tester, widget, {prefs, overrides})` с `ProviderScope`, моками `SharedPreferences` (`setMockInitialValues`), готовым `translationsProvider` (en) и `MaterialApp`; её используют widget-тесты этого и следующих change
 
-- [ ] 3.1 В `profile_tile_main.dart` удалить блок ссылок сайта и поддержки, `_launchUrlWithCheck`, `_getLinkIcon`, `_formatSupportLink`, `verifiedDomains`, `verifiedLinks` и неиспользуемые импорты
-- [ ] 3.2 В `profile_tile.dart` удалить `NewSiteSubscriptionInfo`, если у него нет вызовов
+- [ ] 3.1 Удалить `lib/features/profile/widget/profile_tile_main.dart` целиком (вызовов нет)
+- [ ] 3.2 В `profile_tile.dart` удалить `NewSiteSubscriptionInfo` и комментарий `TODO add support url`
 - [ ] 3.3 Если у `showUnknownDomainsWarning` не осталось вызовов, удалить его и связанный диалог
-- [ ] 3.4 Widget-тест: `ProfileTileMain` для профиля с заполненными `supportUrl: https://t.me/x` и `webPageUrl` не содержит текстов `@x` и `profileSupport`/`profileSite` и не содержит иконки Telegram
+- [ ] 3.4 Widget-тест: `ProfileTile` для профиля с заполненными `subInfo.supportUrl: https://t.me/x` и `webPageUrl` не содержит текстов `@x`, `t.me`, `t.components.subscriptionInfo.profileSupport`/`profileSite` и иконки Telegram
 
 ## 4. Проверка
 

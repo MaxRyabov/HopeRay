@@ -25,7 +25,9 @@
 
 - `lib/features/profile/add/add_profile_modal.dart`, `lib/features/profile/add/widgets/nav_bar.dart`, `lib/features/profile/add/widgets/free_btns.dart`
 - `lib/features/profile/notifier/profile_notifier.dart` и модель `FreeProfile` → перегенерация riverpod (`build_runner`)
-- `lib/core/router/dialog/widgets/no_active_profile_dialog.dart`, `lib/core/model/constants.dart` (`AddProfileModalConst`)
+- `lib/core/router/dialog/widgets/no_active_profile_dialog.dart`, `lib/core/router/dialog/dialog_notifier.dart`, `lib/core/model/constants.dart` (`AddProfileModalConst`)
+- `lib/features/home/widget/connection_button.dart` (`return` после окна добавления)
+- `lib/features/profile/add/widgets/free_btn.dart`, `lib/features/profile/add/widgets/widgets.dart`, `lib/core/router/dialog/widgets/free_profile_consent_dialog.dart`
 - `lib/features/home/widget/empty_profiles_home_body.dart` (не используется)
 - `assets/translations/*.i18n.json` → `dart run slang`
 - Сетевой запрос к `raw.githubusercontent.com/hiddify/hiddify-app/.../free_configs` исчезает.

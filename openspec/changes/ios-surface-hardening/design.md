@@ -32,6 +32,7 @@
 - Переименование расширения `HiddifyPacketTunnel` и `SERVICE_IDENTIFIER=com.hiddify.app`: внутренние идентификаторы, см. `REBRAND.md`.
 - Удаление пакета `app_links`. Его нативная часть на Windows обеспечивает активацию уже открытого окна (`main.cpp`). Пакет остаётся, из Dart отписываемся.
 - Удаление `LinkParser` и параметра `triggeredByDeepLink` у `showAddProfile`.
+- Порядок: change идёт после `disable-telemetry-by-default`, иначе сводный privacy report не может быть пуст.
 
 ## Decisions
 
@@ -41,14 +42,14 @@
 - **Удаляются `protocol_activation` в MSIX и `x-scheme-handler` в deb.** Иначе пакеты продолжат регистрировать схемы на уровне ОС.
 - **`app_links` остаётся**, `myAppLinksProvider` удаляется. `main.cpp` не меняется: `SendAppLinkToInstance` продолжает активировать открытое окно, а ссылку, которую он передаёт, никто не слушает.
 - **Удаляется мета-тег `flutter_deeplinking_enabled`** в `AndroidManifest.xml`. Строки `dialogs.confirmation.addProfileByDeepLinkWarning` остаются: их использует `bottom_sheets_notifier.dart` при `triggeredByDeepLink`, а удаление параметра — non-goal.
-- **Privacy manifest: пустой `NSPrivacyCollectedDataTypes`.** iOS-сборка не содержит Sentry DSN и не инициализирует Sentry (`disable-telemetry-by-default`). SDK `sentry-cocoa` остаётся слинкованным, и его собственный privacy manifest может объявлять типы данных. Поэтому итог проверяется сводным privacy report архива. Если отчёт покажет типы данных от Sentry, отдельно решается, исключать ли Sentry из iOS-сборки.
+- **Privacy manifest: пустой `NSPrivacyCollectedDataTypes` у приложения и расширения.** Sentry удалён из приложения в `disable-telemetry-by-default`: его SDK объявлял Crash/Performance/Other Diagnostic Data. Итог проверяется сводным privacy report архива. Если отчёт покажет типы данных от другого SDK, это останавливает MR до решения.
 - **Entitlements сокращаются до `packet-tunnel-provider`.** Provisioning profile может разрешать больше, чем запрашивает приложение, поэтому перевыпуск профилей в секретах CI не ожидается. Это проверяется подписанной сборкой **до слияния**.
 
 ## Risks / Trade-offs
 
 - [Старые инструкции с кнопками `hoperay://` перестают работать] → бот отдаёт строку подписки и QR, как решено в плане.
 - [Удаление entitlement ломает подписанную сборку, если профиль в секретах несовместим] → ручной workflow «iOS TestFlight (manual)» запускается на ветке до MR. Только после установки сборки и подключения открывается MR.
-- [`sentry-cocoa` объявляет данные в своём privacy manifest] → проверка сводным отчётом, см. Decisions.
+- [Другой pod объявляет данные в своём privacy manifest] → проверка сводным отчётом, см. Decisions.
 - [Сравнение путей на Windows не сработает для старой регистрации из другого каталога установки] → такая регистрация остаётся и указывает на уже несуществующий exe. Импорта она не вызывает, потому что ветки deep link удалены.
 
 ## Migration Plan

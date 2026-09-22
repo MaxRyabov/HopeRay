@@ -7,6 +7,7 @@
 - Баннер интро (`intro.banner`) во всех 11 локалях: «All you need for an unrestricted internet» заменяется на «Secure access to your organization's resources» (ru: «Защищённый доступ к ресурсам вашей организации»).
 - Метаданные пакетов Linux переписываются нейтрально, без Psiphon и OpenVPN в ключевых словах: AppStream (`linux/packaging/app.hoperay.com.appdata.xml`: summary, description, keywords) и `.desktop`-метаданные deb и AppImage (`linux/packaging/deb/make_config.yaml`, `linux/packaging/appimage/make_config.yaml`: keywords).
 - `pubspec.yaml` `description` меняется на нейтральное описание. Строка `flutter:` не трогается.
+- Баннер интро может занимать две строки (`maxLines: 2`): новый текст длиннее старого, а переводы на fr, es и pt-BR ещё длиннее.
 - Проверка словаря: в текстах, которые видит пользователь, нет слов про обход, разблокировку, свободный интернет и бесплатные серверы.
 
 ## Capabilities
@@ -24,4 +25,5 @@
 - `assets/translations/*.i18n.json` → `dart run slang`
 - `linux/packaging/app.hoperay.com.appdata.xml`
 - `pubspec.yaml` (только `description`)
+- `lib/features/intro/widget/intro_page.dart` (`maxLines` баннера)
 - Зависит от `key-only-onboarding` (текст «нет профиля») и `hide-chain-features` (скрытые экраны chain, их строки остаются в файлах, но не показываются).

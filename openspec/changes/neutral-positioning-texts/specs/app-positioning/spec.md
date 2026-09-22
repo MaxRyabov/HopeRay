@@ -11,6 +11,10 @@
 - **WHEN** пользователь впервые открывает приложение с английской локалью
 - **THEN** баннер интро: «Secure access to your organization's resources»
 
+#### Scenario: Баннер виден целиком
+- **WHEN** интро открыто на экране шириной 360 dp в любой локали
+- **THEN** текст баннера виден целиком, без многоточия
+
 #### Scenario: Остальные локали
 - **WHEN** проверяется ключ `intro.banner` во всех `assets/translations/*.i18n.json`
 - **THEN** в каждой локали он передаёт смысл «защищённый доступ к ресурсам организации», а не «интернет без ограничений»
@@ -36,3 +40,4 @@
 #### Scenario: Пакеты deb и AppImage
 - **WHEN** проверяются `linux/packaging/deb/make_config.yaml` и `linux/packaging/appimage/make_config.yaml`
 - **THEN** среди `keywords` нет `Psiphon` и `OpenVPN`
+- **AND** это проверяется тем же автоматическим тестом, что и словарь переводов
