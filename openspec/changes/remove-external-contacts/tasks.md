@@ -28,5 +28,5 @@
 
 - [x] 4.1 `dart run build_runner build --delete-conflicting-outputs`, `dart run slang`
 - [x] 4.2 CI зелёный: шаг `flutter analyze` (без ошибок) и `flutter test`
-- [x] 4.3 Grep по `lib/` (без `lib/hiddifycore/generated/` и `lib/gen/`) и `assets/translations/` по регулярным выражениям `t\.me/`, `telegram\.me`, `telegramChannel`: совпадений нет
+- [x] 4.3 Grep по `lib/` (без `lib/hiddifycore/generated/` и `lib/gen/`) и `assets/translations/` по регулярным выражениям `t\.me\b`, `telegram\.(me|org|dog)`, `tg://`, `telegramChannel`: совпадений нет
 - [ ] 4.4 Вручную: экран «О программе» без пункта Telegram

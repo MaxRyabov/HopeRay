@@ -208,7 +208,7 @@ void main() {
       });
     });
 
-    test("Should ignore support url passed in subscription content", () {
+    test("Should ignore support and web page urls passed in subscription content", () {
       final allHeaders = ProfileParser.populateHeaders(
         content: "#profile-title: title\n#support-url: $botUrl\n#profile-web-page-url: $validSupportUrl\nvless://x",
       );

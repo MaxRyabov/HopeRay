@@ -35,7 +35,8 @@ void main() {
       expect(find.byIcon(FontAwesomeIcons.telegram), findsNothing);
       expect(find.byIcon(FontAwesomeIcons.headset), findsNothing);
 
-      // the main tile schedules a one-minute refresh timer; let it fire before teardown
+      // UpdateProfileNotifier keeps itself alive for a minute after the tile unmounts
+      // (ref.disposeDelay); let that timer fire before the test binding checks for pending timers
       await tester.pumpWidget(const SizedBox());
       await tester.pump(const Duration(minutes: 1));
     });
