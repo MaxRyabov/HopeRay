@@ -15,7 +15,6 @@ abstract class Constants {
   static const githubReleasesApiUrl = "https://api.github.com/repos/hoperay-app/hoperay/releases";
   static const githubLatestReleaseUrl = "https://github.com/hoperay-app/hoperay/releases/latest";
   static const appCastUrl = "https://raw.githubusercontent.com/hoperay-app/hoperay/main/appcast.xml";
-  static const telegramChannelUrl = "https://t.me/MaximRiabov";
   static const privacyPolicyUrl = "https://hoperay.app/privacy-policy/";
   static const termsAndConditionsUrl = "https://hoperay.app/terms/";
   static const cfWarpPrivacyPolicy = "https://www.cloudflare.com/application/privacypolicy/";

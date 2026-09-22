@@ -184,7 +184,6 @@
       "checkForUpdate": "Periksa pembaruan",
       "openWorkingDir": "Buka direktori kerja",
       "sourceCode": "Kode sumber",
-      "telegramChannel": "Hubungi di Telegram",
       "termsAndConditions": "Syarat dan Ketentuan",
       "privacyPolicy": "Kebijakan Privasi"
     },
@@ -631,11 +630,6 @@
         "label": "Tunjukkan caranya",
         "url": "https://hiddify.com/manager/"
       }
-    },
-    "unknownDomainsWarning": {
-      "title": "Peringatan tautan eksternal",
-      "youAreAboutToVisit": "Anda akan mengunjungi:",
-      "thisWebsiteIsNotInOurTrustedList": "Situs web ini tidak ada dalam daftar tepercaya kami. Harap lanjutkan dengan hati-hati."
     },
     "proxyInfo": {
       "fullTag": "Tag lengkap:",

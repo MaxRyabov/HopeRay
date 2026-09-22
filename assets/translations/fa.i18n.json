@@ -184,7 +184,6 @@
       "checkForUpdate": "بررسی برای به‌روزرسانی",
       "openWorkingDir": "باز کردن پوشه کاری",
       "sourceCode": "کد منبع",
-      "telegramChannel": "تماس در تلگرام",
       "termsAndConditions": "شرایط و ضوابط",
       "privacyPolicy": "سیاست حفظ حریم خصوصی"
     },
@@ -631,11 +630,6 @@
         "label": "راهنمایی کن",
         "url": "https://hiddify.com/manager/"
       }
-    },
-    "unknownDomainsWarning": {
-      "title": "هشدار لینک خارجی",
-      "youAreAboutToVisit": "شما در حال بازدید از این آدرس هستید:",
-      "thisWebsiteIsNotInOurTrustedList": "این وب‌سایت در لیست مورد اعتماد ما نیست. لطفاً با احتیاط ادامه دهید."
     },
     "proxyInfo": {
       "fullTag": "تگ کامل:",

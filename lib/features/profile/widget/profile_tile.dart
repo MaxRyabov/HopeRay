@@ -1,4 +1,3 @@
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -19,8 +18,6 @@ import 'package:hiddify/features/profile/overview/profiles_notifier.dart';
 import 'package:hiddify/gen/fonts.gen.dart';
 import 'package:hiddify/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:url_launcher/url_launcher.dart';
 
 class ProfileTile extends HookConsumerWidget {
   const ProfileTile({super.key, required this.profile, this.isMain = false, this.margin = EdgeInsets.zero, this.color});
@@ -313,7 +310,6 @@ class ProfileActionsMenu extends HookConsumerWidget {
   }
 }
 
-// TODO add support url
 class ProfileSubscriptionInfo extends HookConsumerWidget {
   const ProfileSubscriptionInfo(this.subInfo, {super.key});
 
@@ -370,7 +366,6 @@ class ProfileSubscriptionInfo extends HookConsumerWidget {
   }
 }
 
-// TODO add support url
 class NewTrafficSubscriptionInfo extends HookConsumerWidget {
   const NewTrafficSubscriptionInfo(this.subInfo, {super.key});
 
@@ -412,7 +407,6 @@ class NewTrafficSubscriptionInfo extends HookConsumerWidget {
   }
 }
 
-// TODO add support url
 class NewDaySubscriptionInfo extends HookConsumerWidget {
   const NewDaySubscriptionInfo(this.subInfo, {super.key});
 
@@ -459,7 +453,6 @@ class NewDaySubscriptionInfo extends HookConsumerWidget {
   }
 }
 
-// TODO add support url
 class NewDayTrafficSubscriptionInfo extends HookConsumerWidget {
   const NewDayTrafficSubscriptionInfo(this.subInfo, {super.key});
 
@@ -511,45 +504,6 @@ class NewDayTrafficSubscriptionInfo extends HookConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class NewSiteSubscriptionInfo extends HookConsumerWidget {
-  const NewSiteSubscriptionInfo(this.subInfo, {super.key});
-
-  final SubscriptionInfo subInfo;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final t = ref.watch(translationsProvider).requireValue;
-    final uri = Uri.parse(subInfo.webPageUrl ?? "");
-    var host = uri.host;
-    if (["telegram.me", "t.me"].contains(host)) {
-      host = "@${uri.path.split("/").last}";
-    }
-    return InkWell(
-      onTap: () => launchUrl(Uri.parse(subInfo.webPageUrl ?? "")),
-      child: Column(
-        children: [
-          const Icon(FluentIcons.globe_person_24_filled, size: 24, color: Colors.blue),
-          Text(t.components.subscriptionInfo.profileSite),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: Text(
-                  host,
-                  // style: theme.textTheme.bodySmall?.copyWith(color: remaining.$2),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }

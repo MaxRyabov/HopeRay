@@ -106,8 +106,6 @@ void main() {
                     download: 1024,
                     total: 10240,
                     expire: DateTime.fromMillisecondsSinceEpoch(1704054600 * 1000),
-                    webPageUrl: validBaseUrl,
-                    supportUrl: validSupportUrl,
                   ),
                 ),
               );
@@ -160,6 +158,65 @@ void main() {
             local: (lp) {},
           );
         });
+      });
+    });
+  });
+
+  group("subscription links", () {
+    const botUrl = "https://t.me/somebot";
+
+    test("Should ignore support and web page urls from remote headers", () {
+      final allHeaders = ProfileParser.populateHeaders(
+        content: '',
+        remoteHeaders: {
+          "profile-title": "title",
+          "subscription-userinfo": "upload=0;download=1024;total=10240;expire=1704054600",
+          "support-url": botUrl,
+          "profile-web-page-url": validBaseUrl,
+        },
+      );
+      expect(allHeaders.isRight(), true);
+      allHeaders.match((l) {}, (headers) {
+        expect(headers.containsKey("support-url"), false);
+        expect(headers.containsKey("profile-web-page-url"), false);
+
+        final profile = ProfileParser.parse(
+          tempFilePath: '',
+          profile: ProfileEntity.remote(
+            id: const Uuid().v4(),
+            active: true,
+            name: '',
+            url: validBaseUrl,
+            lastUpdate: DateTime.now(),
+            populatedHeaders: headers,
+          ),
+        );
+        expect(profile.isRight(), true);
+        profile.match((l) {}, (r) {
+          r.map(
+            remote: (rp) {
+              expect(rp.subInfo, isNotNull);
+              expect(rp.subInfo!.supportUrl, isNull);
+              expect(rp.subInfo!.webPageUrl, isNull);
+              expect(rp.subInfo!.download, equals(1024));
+              expect(rp.subInfo!.total, equals(10240));
+              expect(rp.subInfo!.expire, equals(DateTime.fromMillisecondsSinceEpoch(1704054600 * 1000)));
+            },
+            local: (lp) {},
+          );
+        });
+      });
+    });
+
+    test("Should ignore support url passed in subscription content", () {
+      final allHeaders = ProfileParser.populateHeaders(
+        content: "#profile-title: title\n#support-url: $botUrl\n#profile-web-page-url: $validSupportUrl\nvless://x",
+      );
+      expect(allHeaders.isRight(), true);
+      allHeaders.match((l) {}, (headers) {
+        expect(headers["profile-title"], equals("title"));
+        expect(headers.containsKey("support-url"), false);
+        expect(headers.containsKey("profile-web-page-url"), false);
       });
     });
   });

@@ -190,7 +190,6 @@
       "checkForUpdate": "التحقق من وجود تحديثات",
       "openWorkingDir": "فتح مجلد العمل",
       "sourceCode": "الكود المصدري",
-      "telegramChannel": "تواصل عبر تيليجرام",
       "termsAndConditions": "الشروط والأحكام",
       "privacyPolicy": "سياسة الخصوصية"
     },
@@ -637,11 +636,6 @@
         "label": "أرني كيف",
         "url": "https://hiddify.com/manager/"
       }
-    },
-    "unknownDomainsWarning": {
-      "title": "تحذير من رابط خارجي",
-      "youAreAboutToVisit": "أنت على وشك زيارة:",
-      "thisWebsiteIsNotInOurTrustedList": "هذا الموقع ليس ضمن قائمة المواقع الموثوقة لدينا. يرجى المتابعة بحذر."
     },
     "proxyInfo": {
       "fullTag": "العلامة الكاملة:",

@@ -184,7 +184,6 @@
       "checkForUpdate": "Buscar actualizaciones",
       "openWorkingDir": "Abrir directorio de trabajo",
       "sourceCode": "Código fuente",
-      "telegramChannel": "Contactar por Telegram",
       "termsAndConditions": "Términos y condiciones",
       "privacyPolicy": "Política de privacidad"
     },
@@ -631,11 +630,6 @@
         "label": "Muéstrame cómo",
         "url": "https://hiddify.com/manager/"
       }
-    },
-    "unknownDomainsWarning": {
-      "title": "Advertencia de enlace externo",
-      "youAreAboutToVisit": "Estás a punto de visitar:",
-      "thisWebsiteIsNotInOurTrustedList": "Este sitio web no está en nuestra lista de confianza. Procede con precaución."
     },
     "proxyInfo": {
       "fullTag": "Etiqueta completa:",

@@ -17,7 +17,6 @@ import 'package:hiddify/core/router/dialog/widgets/setting_radio_dialog.dart';
 import 'package:hiddify/core/router/dialog/widgets/setting_slider_dialog.dart';
 import 'package:hiddify/core/router/dialog/widgets/setting_text_dialog.dart';
 import 'package:hiddify/core/router/dialog/widgets/sort_profiles_dialog.dart';
-import 'package:hiddify/core/router/dialog/widgets/unknown_domains_warning_dialog.dart';
 import 'package:hiddify/core/router/dialog/widgets/warp_license_dialog.dart';
 import 'package:hiddify/core/router/dialog/widgets/window_closing_dialog.dart';
 import 'package:hiddify/core/router/go_router/go_router_notifier.dart';
@@ -129,10 +128,6 @@ class DialogNotifier extends _$DialogNotifier {
 
   Future<bool> showFreeProfileConsent({required String title, required String consent}) async {
     return await _show<bool?>(FreeProfileConsentDialog(title: title, consent: consent)) ?? false;
-  }
-
-  Future<bool> showUnknownDomainsWarning({required String url}) async {
-    return await _show<bool?>(UnknownDomainsWarningDialog(url: url)) ?? false;
   }
 
   Future<void> showProxyInfo({required OutboundInfo outboundInfo}) async {
