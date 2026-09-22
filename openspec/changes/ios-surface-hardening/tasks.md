@@ -22,6 +22,7 @@
 - [ ] 3.2 `HiddifyPacketTunnel.entitlements`: в networkextension оставить только `packet-tunnel-provider`
 - [ ] 3.3 `ios/Runner/Info.plist`: удалить `EXAppExtensionAttributes`
 - [ ] 3.4 `ios/Runner/PrivacyInfo.xcprivacy` и `ios/HiddifyPacketTunnel/PrivacyInfo.xcprivacy`: добавить `NSPrivacyTracking=false`, пустые `NSPrivacyTrackingDomains` и `NSPrivacyCollectedDataTypes`; `NSPrivacyAccessedAPITypes` не менять
+- [ ] 3.4a `ios/Runner.xcodeproj/project.pbxproj`: добавить `PBXBuildFile` для обоих `PrivacyInfo.xcprivacy` и включить их в `PBXResourcesBuildPhase` таргетов Runner и HiddifyPacketTunnel
 - [ ] 3.5 `REBRAND.md`: bundle id iOS `app.hoperay.com`; строку про добавленную схему `hoperay://` заменить на «URL-схемы удалены»
 
 ## 4. Тесты
@@ -29,7 +30,7 @@
 - [ ] 4.1 Unit: `LinkParser.parse('hiddify://import/https://example.com/sub#Work')` → url `https://example.com/sub`, name `Work`; то же для `hoperay://`
 - [ ] 4.2 Тест манифестов: читает все файлы из сценария «Проверка манифестов и конфигураций пакетов» и проверяет, что в них нет `CFBundleURLSchemes`, `android:scheme`, `x-scheme-handler` и `protocol_activation`
 - [ ] 4.3 Тест entitlements: в обоих `.entitlements` networkextension содержит ровно `packet-tunnel-provider`, в `Runner.entitlements` нет `aps-environment`
-- [ ] 4.4 Тест privacy manifest: в обоих файлах `NSPrivacyTracking=false` и пустой `NSPrivacyCollectedDataTypes`; в манифесте приложения 4 записи `NSPrivacyAccessedAPITypes` на месте
+- [ ] 4.4 Тест privacy manifest: в обоих файлах `NSPrivacyTracking=false` и пустой `NSPrivacyCollectedDataTypes`; в манифесте приложения 4 записи `NSPrivacyAccessedAPITypes` на месте; в `project.pbxproj` строка `PrivacyInfo.xcprivacy in Resources` встречается дважды
 - [ ] 4.5 Unit для логики «своя/чужая команда»: вынести сравнение в чистую функцию `isOwnCommand(command, exePath)` и проверить реальный формат, который пишет `register`: путь без кавычек с пробелами и `"%1"` (`C:\Program Files\HopeRay\hoperay.exe "%1"`); путь в кавычках; другой регистр; чужой exe
 
 ## 5. Проверка до MR
@@ -37,6 +38,7 @@
 - [ ] 5.1 CI зелёный: `flutter analyze` (без ошибок), `flutter test` и все сборки
 - [ ] 5.2 Ручной workflow «iOS TestFlight (manual)» на ветке: сборка загружена
 - [ ] 5.3 На iPhone из TestFlight: подключение с действующим ключом работает; `hoperay://` из Safari не открывает приложение
+- [ ] 5.3a Распаковать `.ipa` из TestFlight-сборки: `Payload/*.app/PrivacyInfo.xcprivacy` и `PrivacyInfo.xcprivacy` внутри `PlugIns/*.appex` на месте
 - [ ] 5.4 Xcode Organizer → Generate Privacy Report для архива: собираемых типов данных нет. Если есть — остановиться и вынести решение
 - [ ] 5.5 На Android: ссылка `hiddify://…` из браузера не открывает приложение
 - [ ] 5.5a В debug-сборке: `context.go('/home?url=https://example.com/sub')` не открывает окно добавления профиля

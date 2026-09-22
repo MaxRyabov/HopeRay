@@ -11,7 +11,8 @@
   - Windows: удалить `protocol_activation` из MSIX, не регистрировать обработчики и при запуске снимать ранее зарегистрированные, но только свои (команда указывает на exe HopeRay). Регистрации других клиентов не трогаются.
   - Удалить подписку Dart на `app_links` и ветки deep link в redirect роутера. Нативная часть `app_links` на Windows остаётся, на ней держится активация уже открытого окна.
 - iOS entitlements: у основного приложения и расширения остаётся только `packet-tunnel-provider`. Из основного приложения удаляется `aps-environment`, у приложения нет push. Из `Runner/Info.plist` удаляется `EXAppExtensionAttributes`.
-- iOS privacy manifest: «Data Not Collected» (`NSPrivacyTracking=false`, пустой `NSPrivacyCollectedDataTypes`), потому что iOS-сборка по `disable-telemetry-by-default` не содержит Sentry DSN. Итог проверяется сводным privacy report архива.
+- Privacy manifest приложения и расширения включаются в Resources своих таргетов: сейчас они есть в проекте, но в сборку не копируются.
+- iOS privacy manifest: «Data Not Collected» (`NSPrivacyTracking=false`, пустой `NSPrivacyCollectedDataTypes`), потому что Sentry удалён из приложения в `disable-telemetry-by-default`. Итог проверяется сводным privacy report архива.
 - `REBRAND.md`: исправляется bundle id iOS (`app.hoperay.com`).
 
 ## Capabilities

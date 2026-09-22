@@ -34,6 +34,11 @@ Privacy manifest основного приложения и расширения
 - **WHEN** проверяется `ios/HiddifyPacketTunnel/PrivacyInfo.xcprivacy`
 - **THEN** есть `NSPrivacyTracking = false` и пустой `NSPrivacyCollectedDataTypes`
 
+#### Scenario: Манифесты входят в сборку
+- **WHEN** проверяется `ios/Runner.xcodeproj/project.pbxproj` и содержимое `.ipa`
+- **THEN** оба `PrivacyInfo.xcprivacy` входят в `PBXResourcesBuildPhase` своих таргетов (Runner и HiddifyPacketTunnel)
+- **AND** в `.ipa` есть `Payload/*.app/PrivacyInfo.xcprivacy` и `PrivacyInfo.xcprivacy` внутри `.appex`
+
 #### Scenario: Сводный отчёт о приватности
 - **WHEN** для архива iOS-сборки формируется сводный privacy report (Xcode Organizer → Generate Privacy Report)
 - **THEN** в отчёте нет собираемых типов данных, в том числе от подключённых SDK

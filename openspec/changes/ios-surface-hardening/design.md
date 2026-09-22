@@ -43,6 +43,7 @@
 - **`app_links` остаётся**, `myAppLinksProvider` удаляется. `main.cpp` не меняется: `SendAppLinkToInstance` продолжает активировать открытое окно, а ссылку, которую он передаёт, никто не слушает.
 - **Удаляется мета-тег `flutter_deeplinking_enabled`** в `AndroidManifest.xml`. Строки `dialogs.confirmation.addProfileByDeepLinkWarning` остаются: их использует `bottom_sheets_notifier.dart` при `triggeredByDeepLink`, а удаление параметра — non-goal.
 - **Privacy manifest: пустой `NSPrivacyCollectedDataTypes` у приложения и расширения.** Sentry удалён из приложения в `disable-telemetry-by-default`: его SDK объявлял Crash/Performance/Other Diagnostic Data. Итог проверяется сводным privacy report архива. Если отчёт покажет типы данных от другого SDK, это останавливает MR до решения.
+- **Privacy manifest включается в Resources.** Сейчас оба `PrivacyInfo.xcprivacy` есть в `project.pbxproj` как ссылки на файлы, но не входят в `PBXResourcesBuildPhase` ни одного таргета (у расширения фаза пустая), то есть в бандл не копируются. Без этой правки декларация и required-reason API не попадают в сборку, возможен отказ ITMS-91053. Правка делается в pbxproj вручную (`PBXBuildFile` + запись в фазу Resources для каждого таргета) и проверяется содержимым `.ipa`.
 - **Entitlements сокращаются до `packet-tunnel-provider`.** Provisioning profile может разрешать больше, чем запрашивает приложение, поэтому перевыпуск профилей в секретах CI не ожидается. Это проверяется подписанной сборкой **до слияния**.
 
 ## Risks / Trade-offs
