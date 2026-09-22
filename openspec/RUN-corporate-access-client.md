@@ -22,7 +22,7 @@
 
 ## Текущий этап
 
-Этап 1, `stage/1-external-contacts`, MR #5 (база `feat/corporate-access-client`), коммит 3ec0bdde. Цикл замечаний: круг 0 из 4.
+Этап 1, `stage/1-external-contacts`, MR #5 (база `feat/corporate-access-client`), коммит 3ec0bdde. Цикл замечаний: круг 1 из 4.
 
 ## Как тестируем
 
@@ -42,6 +42,10 @@
 - Журнал лежит в `openspec/RUN-corporate-access-client.md`: путь из шаблона скилла был собран из текста аргументов и нерабочий.
 - Flutter 3.38.5 установлен в `C:\flutter` (revision f6ff1529fd, как в CI), системный PATH не меняется: вызывать `/c/flutter/bin/flutter`, `/c/flutter/bin/dart`.
 - hide-chain-features и ios-surface-hardening разбиты на два MR каждый, по capability, чтобы MR были ревьюабельны. `openspec archive` — после второго MR change.
+
+## Круги замечаний
+
+- MR #5, круг 1: CI `test` зелёный, сборки ещё идут; бот ревью «Мишка» (codebear) в процессе, замечаний нет. Ничего не исправлено и не отклонено. Журнал не пушится отдельно, пока идёт CI: новый push отменяет прогон (concurrency cancel-in-progress).
 
 ## Отклонённые замечания ревью
 
