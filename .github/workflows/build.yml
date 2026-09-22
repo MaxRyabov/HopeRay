@@ -131,7 +131,7 @@ jobs:
            mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
            echo "${{secrets.APPLE_MOBILE_PROVISIONING_PROFILES_TARGZ_BASE64}}"|base64 --decode | tar xz -C ~/Library/MobileDevice/Provisioning\ Profiles
            ls ~/Library/MobileDevice/Provisioning\ Profiles
-           security unlock-keychain -p "" signing_temp.keychain
+           # import-codesign-certs already unlocks its keychain; its password is not empty
            security find-identity -v -p codesigning
         #   ls ~/Library/MobileDevice/Provisioning\ Profiles
         #   echo "${{secrets.NEW_APPLE_MOBILE_PROVISIONING_PROFILES_TARXZ_BASE64}}"|base64 --decode | tar xJ -C ~/Library/MobileDevice/Provisioning\ Profiles
@@ -233,8 +233,17 @@ jobs:
           echo "keyAlias=${{ secrets.ANDROID_SIGNING_KEY_ALIAS }}" >> android/key.properties
 
       - name: Setup Windows Signing Properties
+        id: winsign
         if: ${{ inputs.upload-artifact && startsWith(matrix.platform,'windows') }}
+        env:
+          WINDOWS_SIGNING_KEY: ${{ secrets.WINDOWS_SIGNING_KEY }}
         run: |
+            if (-not $env:WINDOWS_SIGNING_KEY) {
+              echo "::warning::WINDOWS_SIGNING_KEY is not set, building without msix and code signing"
+              "signed=false" >> $env:GITHUB_OUTPUT
+              exit 0
+            }
+            "signed=true" >> $env:GITHUB_OUTPUT
             [IO.File]::WriteAllBytes("windows\sign.pfx", [Convert]::FromBase64String("${{ secrets.WINDOWS_SIGNING_KEY }}"))
             (Get-Content "windows\packaging\msix\make_config.yaml") -replace '^certificate_password:.*$', 'certificate_password: ${{ secrets.WINDOWS_SIGNING_PASSWORD }}' | Set-Content "windows\packaging\msix\make_config.yaml"
         
@@ -255,7 +264,7 @@ jobs:
 
 
       - name: Build ${{ matrix.platform }}
-        if: ${{ inputs.upload-artifact || (matrix.platform != 'ios' && matrix.platform != 'windows') }}
+        if: ${{ (matrix.platform == 'windows' && steps.winsign.outputs.signed == 'true') || (matrix.platform != 'windows' && (inputs.upload-artifact || matrix.platform != 'ios')) }}
         env:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         run: |
@@ -268,13 +277,13 @@ jobs:
         run: |
           flutter build ios --release --no-codesign --target lib/main.dart --dart-define sentry_dsn=
 
-      - name: Build windows (without msix, pull request)
-        if: ${{ !inputs.upload-artifact && matrix.platform == 'windows' }}
+      - name: Build windows (without msix)
+        if: ${{ matrix.platform == 'windows' && steps.winsign.outputs.signed != 'true' }}
         run: |
           make windows-zip-release windows-exe-release
 
       - name: Code Sign
-        if: ${{ inputs.upload-artifact && startsWith(matrix.platform,'windows') }}
+        if: ${{ steps.winsign.outputs.signed == 'true' }}
         uses: hiddify/signtool-code-sign-sha256@main
         with:
           certificate: '${{ secrets.WINDOWS_SIGNING_KEY }}'
