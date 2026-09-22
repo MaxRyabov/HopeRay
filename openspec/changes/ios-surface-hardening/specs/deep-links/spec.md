@@ -1,15 +1,26 @@
 ## ADDED Requirements
 
 ### Requirement: Нет регистрации URL-схем
-Приложение MUST NOT регистрироваться в ОС как обработчик URL-схем, ни на одной платформе.
+Приложение и его пакеты MUST NOT регистрироваться в ОС как обработчик URL-схем, ни на одной платформе.
 
-#### Scenario: Проверка манифестов
-- **WHEN** проверяются `ios/Runner/Info.plist`, `macos/Runner/Info.plist`, `android/app/src/main/AndroidManifest.xml`, `linux/packaging/app.hoperay.com.appdata.xml`, `linux/packaging/appimage/make_config.yaml`
-- **THEN** в них нет `CFBundleURLSchemes`, `intent-filter` с `android:scheme` для `hoperay`, `hiddify`, `v2ray`, `v2rayn`, `v2rayng`, `clash`, `clashmeta`, `sing-box` и нет `x-scheme-handler/*`
+#### Scenario: Проверка манифестов и конфигураций пакетов
+- **WHEN** проверяются `ios/Runner/Info.plist`, `macos/Runner/Info.plist`, `android/app/src/main/AndroidManifest.xml`, `linux/packaging/app.hoperay.com.appdata.xml`, `linux/packaging/appimage/make_config.yaml`, `linux/packaging/deb/make_config.yaml`, `windows/packaging/msix/make_config.yaml`
+- **THEN** в них нет `CFBundleURLSchemes`, `android:scheme`, `x-scheme-handler/*` и `protocol_activation`
 
-#### Scenario: Windows после обновления
-- **WHEN** на Windows запускается новая версия, а в реестре остались обработчики схем от предыдущей версии
-- **THEN** приложение снимает регистрацию этих схем и не регистрирует их заново
+#### Scenario: Windows не регистрирует схемы при запуске
+- **WHEN** приложение запускается на Windows
+- **THEN** оно не создаёт ключей `HKCU\Software\Classes\<scheme>` ни для одной схемы
+
+### Requirement: Снятие только своих старых регистраций на Windows
+На Windows при запуске приложение MUST удалять регистрацию схем из `LinkParser.protocols`, только если команда `shell\open\command` этой регистрации указывает на исполняемый файл HopeRay. Регистрации, принадлежащие другим программам, MUST NOT изменяться.
+
+#### Scenario: Старая регистрация HopeRay
+- **WHEN** в `HKCU\Software\Classes\hiddify\shell\open\command` записан путь к исполняемому файлу HopeRay, и запускается новая версия
+- **THEN** ключ `HKCU\Software\Classes\hiddify` удаляется
+
+#### Scenario: Регистрация другого клиента
+- **WHEN** в `HKCU\Software\Classes\v2ray\shell\open\command` записан путь к исполняемому файлу другой программы, и запускается HopeRay
+- **THEN** ключ `HKCU\Software\Classes\v2ray` остаётся без изменений
 
 ### Requirement: Ссылка не запускает импорт
 Приложение MUST NOT начинать добавление профиля по входящей ссылке или маршруту с параметром `url`.
@@ -22,9 +33,16 @@
 - **WHEN** роутер получает местоположение с параметром `?url=https://example.com/sub`
 - **THEN** окно добавления профиля не открывается автоматически
 
-### Requirement: Импорт из буфера обмена поддерживает ссылки со схемами
-Разбор текста при добавлении ключа из буфера обмена или вручную MUST по-прежнему распознавать ссылки подписок, в том числе в форме `hoperay://…` и `hiddify://…`, если пользователь вставил их сам.
+### Requirement: Буфер обмена и QR по-прежнему понимают ссылки со схемами
+Разбор текста при добавлении ключа из буфера обмена или QR-кода MUST по-прежнему распознавать ссылки подписок в форме `hoperay://…` и `hiddify://…`, если пользователь сам их скопировал или отсканировал.
 
 #### Scenario: Вставка ссылки hiddify
 - **WHEN** пользователь копирует `hiddify://import/https://example.com/sub#Work` и выбирает «Буфер обмена»
 - **THEN** профиль добавляется с URL `https://example.com/sub` и именем `Work`
+
+### Requirement: Один экземпляр приложения на Windows
+Повторный запуск приложения на Windows MUST активировать уже открытое окно, а не открывать второе.
+
+#### Scenario: Второй запуск
+- **WHEN** HopeRay уже запущен, и пользователь запускает его ещё раз
+- **THEN** второе окно не появляется, открытое окно выходит на передний план

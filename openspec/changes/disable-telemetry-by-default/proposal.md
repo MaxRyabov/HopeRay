@@ -4,7 +4,8 @@
 
 ## What Changes
 
-- Аналитика выключена по умолчанию. Если пользователь явно её не включал, Sentry не инициализируется. Включить аналитику по-прежнему можно в интро и в настройках.
+- Аналитика выключена по умолчанию. Если пользователь явно её не включал, Sentry не инициализируется. На Android и десктопе включить аналитику по-прежнему можно в интро и в настройках.
+- **iOS собирается без Sentry DSN, и аналитики на iOS нет совсем:** переключатель скрыт, контроллер всегда возвращает `false`. Для App Store это даёт честную декларацию App Privacy «Data Not Collected».
 - Интро определяет регион только по часовому поясу устройства (`RegionDetector`). Запасной запрос к `api.ip.sb/geoip/` удаляется.
 - На экране per-app proxy удаляется действие «Поделиться на GitHub» (`shareOnGithub`) вместе с диалогом подтверждения и строками перевода.
 
@@ -17,6 +18,8 @@
 
 ## Impact
 
+- Порядок слияния: **4-й**, после `hide-chain-features`.
+- `Makefile` (`ios-release`: пустой `sentry_dsn`), `lib/features/common/general_pref_tiles.dart` (`EnableAnalyticsPrefTile`)
 - `lib/core/analytics/analytics_controller.dart`
 - `lib/features/intro/widget/intro_page.dart`
 - `lib/features/per_app_proxy/overview/per_app_proxy_notifier.dart`, `per_app_proxy_page.dart`

@@ -15,6 +15,8 @@
 
 ## 3. UI карточки профиля
 
+- [ ] 3.0 Завести `test/helpers/pump_app.dart`: `pumpApp(tester, widget, {prefs, overrides})` с `ProviderScope`, моками `SharedPreferences` (`setMockInitialValues`), готовым `translationsProvider` (en) и `MaterialApp`; её используют widget-тесты этого и следующих change
+
 - [ ] 3.1 В `profile_tile_main.dart` удалить блок ссылок сайта и поддержки, `_launchUrlWithCheck`, `_getLinkIcon`, `_formatSupportLink`, `verifiedDomains`, `verifiedLinks` и неиспользуемые импорты
 - [ ] 3.2 В `profile_tile.dart` удалить `NewSiteSubscriptionInfo`, если у него нет вызовов
 - [ ] 3.3 Если у `showUnknownDomainsWarning` не осталось вызовов, удалить его и связанный диалог
@@ -22,6 +24,9 @@
 
 ## 4. Проверка
 
+- [ ] 4.0 В job `test` в `.github/workflows/build.yml` добавить шаг `flutter analyze --no-fatal-infos --no-fatal-warnings` после `Prepare`: ошибки анализатора роняют CI, предупреждения не роняют
+
 - [ ] 4.1 `dart run build_runner build --delete-conflicting-outputs`, `dart run slang`
-- [ ] 4.2 `flutter analyze` без новых замечаний, `flutter test` зелёный (в CI)
-- [ ] 4.3 Grep по `lib/` и `assets/translations/`: нет `t.me`, `telegram.me`, `telegramChannel`
+- [ ] 4.2 CI зелёный: шаг `flutter analyze` (без ошибок) и `flutter test`
+- [ ] 4.3 Grep по `lib/` (без `lib/hiddifycore/generated/` и `lib/gen/`) и `assets/translations/` по регулярным выражениям `t\.me/`, `telegram\.me`, `telegramChannel`: совпадений нет
+- [ ] 4.4 Вручную: экран «О программе» без пункта Telegram

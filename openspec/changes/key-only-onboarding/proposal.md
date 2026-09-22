@@ -8,7 +8,7 @@
 
 - Удаляется переключатель «Free» и список бесплатных профилей: `FreeBtns`, `FreeSwitchNotifier`, `FreeProfilesNotifier`, `freeProfilesFilteredByRegion`, модель `FreeProfile` и загрузка `free_configs` с GitHub.
 - Удаляется чип «Help» в окне добавления профиля.
-- Диалог при подключении без профиля (`NoActiveProfileDialog`) больше не ссылается на внешний сайт. Текст объясняет, что нужно добавить выданный ключ доступа, а кнопка «Добавить ключ» открывает окно добавления профиля.
+- Диалог при подключении без профиля (`NoActiveProfileDialog`) больше не ссылается на внешний сайт. Текст объясняет, что нужно добавить выданный ключ доступа. У диалога одна кнопка «OK», после неё открывается окно добавления профиля, а подключение не запускается.
 - Способы добавления остаются прежними: QR-код (мобильные), буфер обмена, ручной ввод.
 - Удаляются ставшие ненужными строки перевода (`common.free`, `pages.profiles.freeSubNotFound*`, `dialogs.noActiveProfile.helpBtn`, `common.help`, если он больше нигде не используется) и неиспользуемый `EmptyProfilesHomeBody`.
 
@@ -20,6 +20,8 @@
 ### Modified Capabilities
 
 ## Impact
+
+- Порядок слияния: **2-й**, после `remove-external-contacts`.
 
 - `lib/features/profile/add/add_profile_modal.dart`, `lib/features/profile/add/widgets/nav_bar.dart`, `lib/features/profile/add/widgets/free_btns.dart`
 - `lib/features/profile/notifier/profile_notifier.dart` и модель `FreeProfile` → перегенерация riverpod (`build_runner`)

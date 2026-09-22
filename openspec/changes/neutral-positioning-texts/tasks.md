@@ -8,6 +8,7 @@
 ## 2. Метаданные
 
 - [ ] 2.1 `linux/packaging/app.hoperay.com.appdata.xml`: summary «Secure access client», description про защищённый доступ к ресурсам организации по выданному ключу, удалить keywords `Psiphon` и `OpenVPN`
+- [ ] 2.1a `linux/packaging/deb/make_config.yaml` и `linux/packaging/appimage/make_config.yaml`: удалить keywords `Psiphon` и `OpenVPN`
 - [ ] 2.2 `pubspec.yaml`: `description: HopeRay secure access client.`, строку `flutter:` не менять
 
 ## 3. Тест словаря
@@ -17,5 +18,6 @@
 
 ## 4. Проверка
 
-- [ ] 4.1 `flutter analyze` без новых замечаний, `flutter test` зелёный (в CI)
+- [ ] 4.1 CI зелёный: шаг `flutter analyze` (без ошибок) и `flutter test`
 - [ ] 4.2 Вручную: интро на ru и en показывает новый баннер
+- [ ] 4.3 Баннер в 9 остальных локалях проверить обратным переводом (или носителем): смысл «защищённый доступ к ресурсам организации», без «свободного интернета»

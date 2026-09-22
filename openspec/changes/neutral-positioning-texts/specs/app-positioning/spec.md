@@ -32,3 +32,7 @@
 #### Scenario: AppStream для Linux
 - **WHEN** проверяется `linux/packaging/app.hoperay.com.appdata.xml`
 - **THEN** `summary` и `description` описывают клиент защищённого доступа, а среди `keywords` нет `Psiphon` и `OpenVPN`
+
+#### Scenario: Пакеты deb и AppImage
+- **WHEN** проверяются `linux/packaging/deb/make_config.yaml` и `linux/packaging/appimage/make_config.yaml`
+- **THEN** среди `keywords` нет `Psiphon` и `OpenVPN`
