@@ -184,7 +184,7 @@
       "checkForUpdate": "Güncellemeleri kontrol et",
       "openWorkingDir": "Çalışma dizinini aç",
       "sourceCode": "Kaynak kodu",
-      "telegramChannel": "Telegram kanalı",
+      "telegramChannel": "Telegram'dan iletişim",
       "termsAndConditions": "Şartlar ve Koşullar",
       "privacyPolicy": "Gizlilik Politikası"
     },
@@ -613,6 +613,10 @@
           "title": "Kuralı sil",
           "msg": "\"$rulename\" kuralını silmek istediğinizden emin misiniz?"
         }
+      },
+      "addProfileByDeepLinkWarning": {
+        "title": "Profil ekle?",
+        "message": "\"${host}\" adresinden bir dış bağlantı yeni bir profil eklemek istiyor. İçe aktarmak ister misiniz?"
       }
     },
     "experimentalNotice": {

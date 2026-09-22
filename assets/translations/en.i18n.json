@@ -184,7 +184,7 @@
       "checkForUpdate": "Check for update",
       "openWorkingDir": "Open working directory",
       "sourceCode": "Source code",
-      "telegramChannel": "Telegram channel",
+      "telegramChannel": "Contact on Telegram",
       "termsAndConditions": "Terms and conditions",
       "privacyPolicy": "Privacy policy"
     },
@@ -613,6 +613,10 @@
           "title": "Delete rule",
           "msg": "Are you sure you want to delete the \"$rulename\" rule?"
         }
+      },
+      "addProfileByDeepLinkWarning": {
+        "title": "Add Profile?",
+        "message": "An external link from \"${host}\" is requesting to add a new profile. Do you want to import it?"
       }
     },
     "experimentalNotice": {

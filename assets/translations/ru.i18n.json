@@ -188,7 +188,7 @@
       "checkForUpdate": "Проверить обновления",
       "openWorkingDir": "Открыть рабочую папку",
       "sourceCode": "Исходный код",
-      "telegramChannel": "Канал в Telegram",
+      "telegramChannel": "Написать в Telegram",
       "termsAndConditions": "Условия использования",
       "privacyPolicy": "Политика конфиденциальности"
     },
@@ -617,6 +617,10 @@
           "title": "Удалить правило",
           "msg": "Вы уверены, что хотите удалить правило \"$rulename\"?"
         }
+      },
+      "addProfileByDeepLinkWarning": {
+        "title": "Добавить профиль?",
+        "message": "Внешняя ссылка с «${host}» предлагает добавить новый профиль. Импортировать его?"
       }
     },
     "experimentalNotice": {

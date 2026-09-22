@@ -184,7 +184,7 @@
       "checkForUpdate": "Verificar atualizações",
       "openWorkingDir": "Abrir diretório de trabalho",
       "sourceCode": "Código-fonte",
-      "telegramChannel": "Canal do Telegram",
+      "telegramChannel": "Contato no Telegram",
       "termsAndConditions": "Termos e Condições",
       "privacyPolicy": "Política de Privacidade"
     },
@@ -613,6 +613,10 @@
           "title": "Excluir regra",
           "msg": "Tem certeza de que deseja excluir a regra \"$rulename\"?"
         }
+      },
+      "addProfileByDeepLinkWarning": {
+        "title": "Adicionar perfil?",
+        "message": "Um link externo de \"${host}\" está solicitando adicionar um novo perfil. Deseja importá-lo?"
       }
     },
     "experimentalNotice": {

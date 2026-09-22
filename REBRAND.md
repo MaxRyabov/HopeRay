@@ -59,7 +59,7 @@ All applied. **Cannot be build-verified here** (no native libs / Flutter SDK) �
 ## ⏳ Remaining — your values / optional
 
 - **Real URLs** for `lib/core/model/constants.dart` (replace the `hoperay` placeholders): repo, releases/API,
-  `appCastUrl` (desktop update feed), telegram, privacy, terms.
+  `appCastUrl` (desktop update feed), privacy, terms. (Telegram → `@MaximRiabov` — done.)
 - **CI / store**, only if you publish from this repo: `.github/workflows/*` (`Hiddify-*` artifact names,
   `packageName`/`bundle-id` = `app.hiddify.com`), `appcast.xml`, `.vscode/launch.json`, `test.configs/README.md`,
   remaining `Hiddify-*` artifact names in `Makefile`, and store badges/links in `README.md`.

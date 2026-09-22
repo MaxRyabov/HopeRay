@@ -190,7 +190,7 @@
       "checkForUpdate": "التحقق من وجود تحديثات",
       "openWorkingDir": "فتح مجلد العمل",
       "sourceCode": "الكود المصدري",
-      "telegramChannel": "قناة التيليجرام",
+      "telegramChannel": "تواصل عبر تيليجرام",
       "termsAndConditions": "الشروط والأحكام",
       "privacyPolicy": "سياسة الخصوصية"
     },
@@ -619,6 +619,10 @@
           "title": "حذف القاعدة",
           "msg": "هل أنت متأكد من رغبتك في حذف قاعدة \"$rulename\"؟"
         }
+      },
+      "addProfileByDeepLinkWarning": {
+        "title": "إضافة ملف شخصي؟",
+        "message": "رابط خارجي من \"${host}\" يطلب إضافة ملف شخصي جديد. هل تريد استيراده؟"
       }
     },
     "experimentalNotice": {
