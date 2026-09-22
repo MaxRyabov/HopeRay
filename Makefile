@@ -49,11 +49,9 @@ CORE_PRODUCT_NAME=hiddify-core
 CORE_NAME=hiddify-lib
 LIB_NAME=hiddify-core
 
-ifeq ($(CHANNEL),prod)
-	CORE_URL=https://github.com/hiddify/hiddify-next-core/releases/download/v$(core.version)
-else
-	CORE_URL=https://github.com/hiddify/hiddify-next-core/releases/download/draft
-endif
+# Always the pinned core from dependencies.properties: upstream's floating "draft" release
+# changes the Libbox API under us and breaks the native Android/iOS code.
+CORE_URL=https://github.com/hiddify/hiddify-next-core/releases/download/v$(core.version)
 
 ifeq ($(CHANNEL),prod)
 	TARGET=lib/main_prod.dart
