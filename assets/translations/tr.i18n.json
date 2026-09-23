@@ -22,10 +22,8 @@
     "clipboard": "Pano",
     "addToClipboard": "Panoya ekle",
     "scanQr": "QR Tara",
-    "free": "Ücretsiz",
     "warp": "WARP",
     "fragment": "Fragment",
-    "help": "Yardım",
     "save": "Kaydet",
     "update": "Güncelle",
     "share": "Paylaş",
@@ -132,8 +130,6 @@
       "viewAllProfiles": "Tüm profilleri görüntüle",
       "activeProfileName": "Aktif profil adı: \"${name}\".",
       "nonActiveProfileName": "Aktif profil olarak \"${name}\" seçin",
-      "freeSubNotFound": "Ücretsiz abonelik bulunamadı",
-      "freeSubNotFoundForRegion": "\"${region}\" bölgesi için ücretsiz abonelik bulunamadı",
       "failedToLoad": "Yüklenemedi",
       "updateSubscriptions": "Abonelikleri güncelle",
       "share": {
@@ -624,12 +620,8 @@
       "disable": "Tekrar gösterme"
     },
     "noActiveProfile": {
-      "title": "Bir profil seçin",
-      "msg": "VPN bağlantı ayrıntılarınızı içeren bir bağlantı profili ekleyerek başlayalım.\n\nHenüz bir VPN sunucunuz yok mu? Endişelenmeyin, hızlı ve ücretsiz bir şekilde kurmak için aşağıdaki eğitimi takip edin.",
-      "helpBtn": {
-        "label": "Nasıl yapıldığını göster",
-        "url": "https://hiddify.com/manager/"
-      }
+      "title": "Erişim anahtarı ekleyin",
+      "msg": "Bağlanmak için kuruluşunuzun verdiği erişim anahtarını ekleyin"
     },
     "proxyInfo": {
       "fullTag": "Tam etiket:",

@@ -22,10 +22,8 @@
     "clipboard": "Presse-papiers",
     "addToClipboard": "Ajouter au presse-papiers",
     "scanQr": "Scanner le QR code",
-    "free": "Gratuit",
     "warp": "WARP",
     "fragment": "Fragment",
-    "help": "Aide",
     "save": "Enregistrer",
     "update": "Mettre à jour",
     "share": "Partager",
@@ -132,8 +130,6 @@
       "viewAllProfiles": "Voir tous les profils",
       "activeProfileName": "Nom du profil actif : \"${name}\".",
       "nonActiveProfileName": "Sélectionner \"${name}\" comme profil actif",
-      "freeSubNotFound": "Aucun abonnement gratuit trouvé",
-      "freeSubNotFoundForRegion": "Aucun abonnement gratuit trouvé pour la région \"${region}\"",
       "failedToLoad": "Échec du chargement",
       "updateSubscriptions": "Mettre à jour les abonnements",
       "share": {
@@ -624,12 +620,8 @@
       "disable": "Ne plus afficher"
     },
     "noActiveProfile": {
-      "title": "Choisissez un profil",
-      "msg": "Pour commencer, ajoutez un profil de connexion qui inclut les détails de votre connexion VPN.\n\nVous n'avez pas encore de serveur VPN ? Pas de problème, suivez le tutoriel ci-dessous pour en configurer un rapidement et gratuitement.",
-      "helpBtn": {
-        "label": "Montrez-moi comment",
-        "url": "https://hiddify.com/manager/"
-      }
+      "title": "Ajoutez une clé d'accès",
+      "msg": "Pour vous connecter, ajoutez la clé d'accès fournie par votre organisation"
     },
     "proxyInfo": {
       "fullTag": "Tag complet :",

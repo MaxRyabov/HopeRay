@@ -12,7 +12,7 @@
 | # | Этап / подветка | OpenSpec change | Статус | MR |
 |---|---|---|---|---|
 | 1 | `stage/1-external-contacts` | remove-external-contacts | **слит 2026-09-23**, change заархивирован | #5 |
-| 2 | `stage/2-key-only-onboarding` | key-only-onboarding | план | — |
+| 2 | `stage/2-key-only-onboarding` | key-only-onboarding | код готов, MR открыт | — |
 | 3 | `stage/3a-hide-chain` | hide-chain-features (chain: UI, off, WARP-диалог, unblocker.mode, сброс в bootstrap) | план | — |
 | 4 | `stage/3b-keyless-profiles` | hide-chain-features (WARP/Psiphon-профили, ошибки, json editor) | план | — |
 | 5 | `stage/4-remove-sentry` | disable-telemetry-by-default | план | — |
@@ -22,7 +22,9 @@
 
 ## Текущий этап
 
-Этап 2, `stage/2-key-only-onboarding` (не начат). Этап 1 слит: merge-коммит 21d4738d. Этап 1 закрыт. Следующий — этап 2, `stage/2-key-only-onboarding` (ветвить от `feat/corporate-access-client`).
+Этап 2, `stage/2-key-only-onboarding`. Ветка от `feat/corporate-access-client`, задачи 1.1–4.2, 5.1–5.3, 6.2 из `tasks.md` закрыты. Осталось: 5.4 (ручная проверка на пользователе) и 6.1 (зелёный CI).
+
+Локальная проверка на коммите этапа: `flutter analyze` — 0 ошибок, 361 info/warning; `flutter test` — 32/32 зелёные.
 
 ## Как тестируем
 
@@ -42,6 +44,9 @@
 - Журнал лежит в `openspec/RUN-corporate-access-client.md`: путь из шаблона скилла был собран из текста аргументов и нерабочий.
 - Flutter 3.38.5 установлен в `C:\flutter` (revision f6ff1529fd, как в CI), системный PATH не меняется: вызывать `/c/flutter/bin/flutter`, `/c/flutter/bin/dart`.
 - hide-chain-features и ios-surface-hardening разбиты на два MR каждый, по capability, чтобы MR были ревьюабельны. `openspec archive` — после второго MR change.
+- Этап 2: высота листа `AddProfileOptions` теперь фиксированная — `fixBtnsHeight + fixBtnsGap * 2`, доля от экрана зажата в `clamp(0.0, 1.0)`. Ветки `freeSwitch` и `isDesktop` в расчёте высоты ушли вместе с `NavBar`; на десктопе лист и раньше был нерастягиваемым.
+- Этап 2, сверх `tasks.md`: убран лишний импорт `hooks_riverpod` из `profile_notifier.dart` (после удаления free-провайдеров он стал избыточным, анализатор давал `unnecessary_import`), и удалён весь закомментированный `switch`-рукав в `home_page.dart`, а не одна строка: обе его ветки ссылались на несуществующие виджеты.
+- Этап 2: `depend_on_referenced_packages` на `flutter_test` в двух новых тестах — то же замечание, что у всех пяти существующих тестовых файлов: в `pubspec.yaml` `dev_dependencies.flutter_test` закомментирован. Однострочная правка чинит все семь, но тянет `flutter pub get` и `pubspec.lock` на 6 платформах; вынесено в долг анализатора, не трогалось в этом MR.
 
 ## Круги замечаний
 

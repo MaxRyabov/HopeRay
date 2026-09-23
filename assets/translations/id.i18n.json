@@ -22,10 +22,8 @@
     "clipboard": "Papan klip",
     "addToClipboard": "Tambah ke papan klip",
     "scanQr": "Pindai QR",
-    "free": "Gratis",
     "warp": "WARP",
     "fragment": "Fragmen",
-    "help": "Bantuan",
     "save": "Simpan",
     "update": "Perbarui",
     "share": "Bagikan",
@@ -132,8 +130,6 @@
       "viewAllProfiles": "Lihat semua profil",
       "activeProfileName": "Nama profil aktif: \"${name}\".",
       "nonActiveProfileName": "Pilih \"${name}\" sebagai profil aktif",
-      "freeSubNotFound": "Tidak ada langganan gratis yang ditemukan",
-      "freeSubNotFoundForRegion": "Tidak ada langganan gratis yang ditemukan untuk wilayah \"${region}\"",
       "failedToLoad": "Gagal memuat",
       "updateSubscriptions": "Perbarui langganan",
       "share": {
@@ -624,12 +620,8 @@
       "disable": "Jangan tampilkan lagi"
     },
     "noActiveProfile": {
-      "title": "Pilih profil",
-      "msg": "Mari kita mulai dengan menambahkan profil koneksi yang berisi detail koneksi VPN Anda.\n\nBelum punya server VPN? Jangan khawatir, ikuti tutorial di bawah ini untuk mengaturnya dengan cepat dan gratis.",
-      "helpBtn": {
-        "label": "Tunjukkan caranya",
-        "url": "https://hiddify.com/manager/"
-      }
+      "title": "Tambahkan kunci akses",
+      "msg": "Untuk terhubung, tambahkan kunci akses yang diberikan oleh organisasi Anda"
     },
     "proxyInfo": {
       "fullTag": "Tag lengkap:",

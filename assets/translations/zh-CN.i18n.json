@@ -22,10 +22,8 @@
     "clipboard": "剪贴板",
     "addToClipboard": "添加到剪贴板",
     "scanQr": "扫描二维码",
-    "free": "免费",
     "warp": "WARP",
     "fragment": "Fragment",
-    "help": "帮助",
     "save": "保存",
     "update": "更新",
     "share": "分享",
@@ -132,8 +130,6 @@
       "viewAllProfiles": "查看所有配置文件",
       "activeProfileName": "当前配置文件：\"${name}\"",
       "nonActiveProfileName": "选择 \"${name}\" 作为当前配置文件",
-      "freeSubNotFound": "未找到免费订阅",
-      "freeSubNotFoundForRegion": "未找到 \"${region}\" 地区的免费订阅",
       "failedToLoad": "加载失败",
       "updateSubscriptions": "更新订阅",
       "share": {
@@ -624,12 +620,8 @@
       "disable": "不再显示"
     },
     "noActiveProfile": {
-      "title": "选择一个配置文件",
-      "msg": "让我们从添加一个包含您 VPN 连接详细信息的配置文件开始。\n\n还没有 VPN 服务器？别担心，按照下面的教程，您可以快速免费地设置一个。",
-      "helpBtn": {
-        "label": "告诉我如何操作",
-        "url": "https://hiddify.com/manager/"
-      }
+      "title": "添加访问密钥",
+      "msg": "要连接，请添加贵组织签发的访问密钥"
     },
     "proxyInfo": {
       "fullTag": "完整标签：",

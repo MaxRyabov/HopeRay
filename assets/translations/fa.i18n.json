@@ -22,10 +22,8 @@
     "clipboard": "کلیپ‌بورد",
     "addToClipboard": "افزودن به کلیپ‌بورد",
     "scanQr": "اسکن QR",
-    "free": "رایگان",
     "warp": "WARP",
     "fragment": "Fragment",
-    "help": "راهنما",
     "save": "ذخیره",
     "update": "به‌روزرسانی",
     "share": "اشتراک‌گذاری",
@@ -132,8 +130,6 @@
       "viewAllProfiles": "مشاهده همه پروفایل‌ها",
       "activeProfileName": "نام پروفایل فعال: «${name}»",
       "nonActiveProfileName": "انتخاب «${name}» به عنوان پروفایل فعال",
-      "freeSubNotFound": "اشتراک رایگان یافت نشد",
-      "freeSubNotFoundForRegion": "اشتراک رایگان برای منطقه «${region}» یافت نشد",
       "failedToLoad": "بارگذاری ناموفق بود",
       "updateSubscriptions": "به‌روزرسانی اشتراک‌ها",
       "share": {
@@ -624,12 +620,8 @@
       "disable": "دیگر نمایش نده"
     },
     "noActiveProfile": {
-      "title": "یک پروفایل انتخاب کنید",
-      "msg": "بیایید با افزودن یک پروفایل اتصال که شامل جزئیات اتصال VPN شماست، شروع کنیم.\n\nهنوز سرور VPN ندارید؟ نگران نباشید، با دنبال کردن راهنمای زیر می‌توانید به سرعت و رایگان یکی برای خودتان بسازید.",
-      "helpBtn": {
-        "label": "راهنمایی کن",
-        "url": "https://hiddify.com/manager/"
-      }
+      "title": "کلید دسترسی را اضافه کنید",
+      "msg": "برای اتصال، کلید دسترسی صادرشده توسط سازمان خود را اضافه کنید"
     },
     "proxyInfo": {
       "fullTag": "تگ کامل:",

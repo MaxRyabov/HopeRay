@@ -22,10 +22,8 @@
     "clipboard": "剪貼簿",
     "addToClipboard": "新增至剪貼簿",
     "scanQr": "掃描 QR Code",
-    "free": "免費",
     "warp": "WARP",
     "fragment": "Fragment",
-    "help": "說明",
     "save": "儲存",
     "update": "更新",
     "share": "分享",
@@ -132,8 +130,6 @@
       "viewAllProfiles": "檢視所有設定檔",
       "activeProfileName": "目前設定檔：「${name}」",
       "nonActiveProfileName": "選擇「${name}」作為目前設定檔",
-      "freeSubNotFound": "未找到免費訂閱",
-      "freeSubNotFoundForRegion": "未找到「${region}」地區的免費訂閱",
       "failedToLoad": "載入失敗",
       "updateSubscriptions": "更新訂閱",
       "share": {
@@ -624,12 +620,8 @@
       "disable": "不再顯示"
     },
     "noActiveProfile": {
-      "title": "選擇一個設定檔",
-      "msg": "讓我們從新增一個包含您 VPN 連線詳細資訊的設定檔開始。\n\n還沒有 VPN 伺服器？別擔心，按照下面的教學，您可以快速免費地設定一個。",
-      "helpBtn": {
-        "label": "告訴我如何操作",
-        "url": "https://hiddify.com/manager/"
-      }
+      "title": "新增存取金鑰",
+      "msg": "若要連線，請新增貴組織核發的存取金鑰"
     },
     "proxyInfo": {
       "fullTag": "完整標籤：",
