@@ -621,7 +621,7 @@
     },
     "noActiveProfile": {
       "title": "Erişim anahtarı ekleyin",
-      "msg": "Bağlanmak için kuruluşunuzun verdiği erişim anahtarını ekleyin"
+      "msg": "Bağlanmak için kuruluşunuzun verdiği erişim anahtarını ekleyin."
     },
     "proxyInfo": {
       "fullTag": "Tam etiket:",

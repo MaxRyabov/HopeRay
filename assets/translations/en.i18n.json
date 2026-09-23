@@ -621,7 +621,7 @@
     },
     "noActiveProfile": {
       "title": "Add an access key",
-      "msg": "To connect, add the access key issued by your organization"
+      "msg": "To connect, add the access key issued by your organization."
     },
     "proxyInfo": {
       "fullTag": "Full tag:",

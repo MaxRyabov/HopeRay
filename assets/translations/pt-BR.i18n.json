@@ -621,7 +621,7 @@
     },
     "noActiveProfile": {
       "title": "Adicione uma chave de acesso",
-      "msg": "Para conectar, adicione a chave de acesso fornecida pela sua organização"
+      "msg": "Para conectar, adicione a chave de acesso fornecida pela sua organização."
     },
     "proxyInfo": {
       "fullTag": "Tag completa:",

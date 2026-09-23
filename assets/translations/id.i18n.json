@@ -621,7 +621,7 @@
     },
     "noActiveProfile": {
       "title": "Tambahkan kunci akses",
-      "msg": "Untuk terhubung, tambahkan kunci akses yang diberikan oleh organisasi Anda"
+      "msg": "Untuk terhubung, tambahkan kunci akses yang diberikan oleh organisasi Anda."
     },
     "proxyInfo": {
       "fullTag": "Tag lengkap:",

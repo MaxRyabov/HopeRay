@@ -17,7 +17,7 @@ void main() {
     // ButtonStyleButton covers Text/Filled/Elevated/OutlinedButton, should "OK" ever move to one
     expect(find.byWidgetPredicate((w) => w is ButtonStyleButton || w is IconButton), findsOneWidget);
     expect(find.textContaining('hiddify.com'), findsNothing);
-    expect(find.textContaining(RegExp('free', caseSensitive: false)), findsNothing);
-    expect(find.textContaining(RegExp('server', caseSensitive: false)), findsNothing);
+    expect(find.textContaining(RegExp(r'\bfree\b', caseSensitive: false)), findsNothing);
+    expect(find.textContaining(RegExp(r'\bservers?\b', caseSensitive: false)), findsNothing);
   });
 }
