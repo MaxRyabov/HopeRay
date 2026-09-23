@@ -11,7 +11,7 @@
 
 | # | Этап / подветка | OpenSpec change | Статус | MR |
 |---|---|---|---|---|
-| 1 | `stage/1-external-contacts` | remove-external-contacts | MR открыт, цикл закрыт, ждёт слияния | #5 |
+| 1 | `stage/1-external-contacts` | remove-external-contacts | **слит 2026-09-23**, change заархивирован | #5 |
 | 2 | `stage/2-key-only-onboarding` | key-only-onboarding | план | — |
 | 3 | `stage/3a-hide-chain` | hide-chain-features (chain: UI, off, WARP-диалог, unblocker.mode, сброс в bootstrap) | план | — |
 | 4 | `stage/3b-keyless-profiles` | hide-chain-features (WARP/Psiphon-профили, ошибки, json editor) | план | — |
@@ -22,7 +22,7 @@
 
 ## Текущий этап
 
-Этап 1, `stage/1-external-contacts`, MR #5 (база `feat/corporate-access-client`), коммит 3ec0bdde. Цикл замечаний завершён (4 из 4). Этап ждёт слияния.
+Этап 2, `stage/2-key-only-onboarding` (не начат). Этап 1 слит: merge-коммит 21d4738d. Этап 1 закрыт. Следующий — этап 2, `stage/2-key-only-onboarding` (ветвить от `feat/corporate-access-client`).
 
 ## Как тестируем
 
@@ -63,7 +63,6 @@
 ## Осталось на пользователе
 
 - Слияние каждого MR.
-- Этап 1: ручная проверка экрана «О программе» (tasks 4.4) — на ревьюере.
 - Долг анализатора: ~359 info/warning; правило — новые и изменённые файлы без новых замечаний; после фичи — отдельная задача свести к нулю и сделать analyze строгим.
 - CODE_OF_CONDUCT: приватный канал для жалоб (email модераторов) — решение руководства.
 - Ручные проверки на устройствах (Android, iPhone TestFlight, Windows) — перечислены в tasks.md каждого change.
