@@ -33,5 +33,5 @@
 
 ## 6. Проверка
 
-- [ ] 6.1 CI зелёный (локально: `flutter analyze` 0 ошибок, `flutter test` 32/32): шаг `flutter analyze` (без ошибок) и `flutter test`
+- [x] 6.1 CI зелёный (локально: `flutter analyze` 0 ошибок, `flutter test` 32/32): шаг `flutter analyze` (без ошибок) и `flutter test`; на MR #6 прогон 35850195954 — `test` и все 6 сборок зелёные
 - [x] 6.2 Grep по `lib/` и `assets/translations/`: нет `free_configs`, `hiddify.com/manager`, `freeSwitch`, `FreeProfile`
