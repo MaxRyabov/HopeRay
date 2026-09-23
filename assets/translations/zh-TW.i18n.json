@@ -184,7 +184,6 @@
       "checkForUpdate": "檢查更新",
       "openWorkingDir": "開啟工作目錄",
       "sourceCode": "原始碼",
-      "telegramChannel": "透過 Telegram 聯絡",
       "termsAndConditions": "條款與條件",
       "privacyPolicy": "隱私權政策"
     },
@@ -631,11 +630,6 @@
         "label": "告訴我如何操作",
         "url": "https://hiddify.com/manager/"
       }
-    },
-    "unknownDomainsWarning": {
-      "title": "外部連結警告",
-      "youAreAboutToVisit": "您即將造訪：",
-      "thisWebsiteIsNotInOurTrustedList": "此網站不在我們的信任清單中。請謹慎操作。"
     },
     "proxyInfo": {
       "fullTag": "完整標籤：",

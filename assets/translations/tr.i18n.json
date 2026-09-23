@@ -184,7 +184,6 @@
       "checkForUpdate": "Güncellemeleri kontrol et",
       "openWorkingDir": "Çalışma dizinini aç",
       "sourceCode": "Kaynak kodu",
-      "telegramChannel": "Telegram'dan iletişim",
       "termsAndConditions": "Şartlar ve Koşullar",
       "privacyPolicy": "Gizlilik Politikası"
     },
@@ -631,11 +630,6 @@
         "label": "Nasıl yapıldığını göster",
         "url": "https://hiddify.com/manager/"
       }
-    },
-    "unknownDomainsWarning": {
-      "title": "Dış bağlantı uyarısı",
-      "youAreAboutToVisit": "Şu adresi ziyaret etmek üzeresiniz:",
-      "thisWebsiteIsNotInOurTrustedList": "Bu web sitesi güvenilir listemizde değil. Lütfen dikkatli devam edin."
     },
     "proxyInfo": {
       "fullTag": "Tam etiket:",

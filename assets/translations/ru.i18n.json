@@ -188,7 +188,6 @@
       "checkForUpdate": "Проверить обновления",
       "openWorkingDir": "Открыть рабочую папку",
       "sourceCode": "Исходный код",
-      "telegramChannel": "Написать в Telegram",
       "termsAndConditions": "Условия использования",
       "privacyPolicy": "Политика конфиденциальности"
     },
@@ -635,11 +634,6 @@
         "label": "Покажите, как",
         "url": "https://hiddify.com/manager/"
       }
-    },
-    "unknownDomainsWarning": {
-      "title": "Предупреждение о внешней ссылке",
-      "youAreAboutToVisit": "Вы собираетесь перейти на сайт:",
-      "thisWebsiteIsNotInOurTrustedList": "Этот сайт не входит в наш список доверенных. Пожалуйста, действуйте с осторожностью."
     },
     "proxyInfo": {
       "fullTag": "Полный тег:",

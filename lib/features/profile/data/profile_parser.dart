@@ -48,8 +48,6 @@ class ProfileParser {
     'content-disposition',
     'subscription-userinfo',
     'profile-update-interval',
-    'support-url',
-    'profile-web-page-url',
     'enable-warp',
     'enable-fragment',
   ];
@@ -358,15 +356,6 @@ class ProfileParser {
         SubscriptionInfo? subInfo;
         if (headers['subscription-userinfo'] case final String subInfoStr) {
           subInfo = _parseSubscriptionInfo(subInfoStr);
-        }
-
-        if (subInfo != null) {
-          if (headers['profile-web-page-url'] case final String profileWebPageUrl when isUrl(profileWebPageUrl)) {
-            subInfo = subInfo.copyWith(webPageUrl: profileWebPageUrl);
-          }
-          if (headers['support-url'] case final String profileSupportUrl when isUrl(profileSupportUrl)) {
-            subInfo = subInfo.copyWith(supportUrl: profileSupportUrl);
-          }
         }
 
         return profile.map(
