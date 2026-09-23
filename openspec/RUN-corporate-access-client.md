@@ -12,7 +12,7 @@
 | # | Этап / подветка | OpenSpec change | Статус | MR |
 |---|---|---|---|---|
 | 1 | `stage/1-external-contacts` | remove-external-contacts | **слит 2026-09-23**, change заархивирован | #5 |
-| 2 | `stage/2-key-only-onboarding` | key-only-onboarding | код готов, MR открыт | #6 |
+| 2 | `stage/2-key-only-onboarding` | key-only-onboarding | готов к слиянию, цикл замечаний закрыт | #6 |
 | 3 | `stage/3a-hide-chain` | hide-chain-features (chain: UI, off, WARP-диалог, unblocker.mode, сброс в bootstrap) | план | — |
 | 4 | `stage/3b-keyless-profiles` | hide-chain-features (WARP/Psiphon-профили, ошибки, json editor) | план | — |
 | 5 | `stage/4-remove-sentry` | disable-telemetry-by-default | план | — |
@@ -22,7 +22,7 @@
 
 ## Текущий этап
 
-Этап 2, `stage/2-key-only-onboarding`. Ветка от `feat/corporate-access-client`, задачи 1.1–4.2, 5.1–5.3, 6.2 из `tasks.md` закрыты. Осталось: 5.4 (ручная проверка на пользователе); 6.1 закрыт — CI на MR #6 зелёный целиком. MR #6 в `feat/corporate-access-client`, коммит e5b1dd75.
+Этап 2, `stage/2-key-only-onboarding`. Цикл замечаний пройден (4 круга), MR #6 готов к слиянию. Задачи 1.1–4.2, 5.1–5.3, 6.1, 6.2 из `tasks.md` закрыты. Осталось: 5.4 (ручная проверка на пользователе); 6.1 закрыт — CI на MR #6 зелёный целиком. MR #6 в `feat/corporate-access-client`, коммит e5b1dd75.
 
 Локальная проверка на коммите этапа: `flutter analyze` — 0 ошибок, 361 info/warning; `flutter test` — 32/32 зелёные.
 
@@ -57,6 +57,7 @@
 - MR #6, круг 1: CI `test` ещё идёт (прогон 35850195954), сборки платформ не стартовали; ревью «Мишки» не опубликовано, замечаний нет. Ничего не исправлено и не отклонено. Журнал коммитится локально, пушится вместе с правками или при закрытии цикла.
 - MR #6, круг 2: CI полностью зелёный — `test` и все 6 сборок (прогон 35850195954); task 6.1 закрыт. Ревью «Мишки» всё ещё заглушка «взялся за этот MR», замечаний нет. Исправлений и отклонений нет.
 - MR #6, круг 3: опубликовано ревью «Мишки» — 6 замечаний (1 MEDIUM, 5 LOW). Исправлено 2: комментарий о намеренной ригидности листа в `AddProfileOptions` (#4081862490) и усилен тест `NoActiveProfileDialog` — `widgetWithText(TextButton, 'OK')` плюс проверка, что кнопочный виджет ровно один по `ButtonStyleButton || IconButton` (#4081862617). Отклонено 4 (см. таблицу). CI на коммите e5b1dd75 полностью зелёный (прогон 35852923986); локально после правок `flutter analyze` 0 ошибок / 361 info, `flutter test` 32/32.
+- MR #6, круг 4 (последний): новых inline-замечаний нет. Разобрано off-diff замечание code_graph (`home_page.dart:98`, частичная очистка мёртвого кода) — исправлено: удалены оставшиеся обрывки того же закомментированного `switch (activeProfile)`, а также мёртвые `// final hasAnyProfile = ...` и `// const Gap(100)`. Сводка «Мишки» заявляет 15 замечаний, через GitHub API опубликовано 7 (6 inline + 1 off-diff); остальные доступны только на сайте бота. CI на правках круга 3 (прогон 35855056999): `test` и 5 из 6 сборок зелёные, android-apk ещё шла — правки круга 3 и 4 только комментарии, тест и мёртвый код; android-aab на том же коде зелёная. Локально: `flutter analyze` 0 ошибок / 361 info, `flutter test` 32/32. Цикл остановлен, cron удалён.
 - Push коммитов только с `.md` не перезапускает CI: `ci.yml` имеет `paths-ignore: '**.md'`.
 
 ## Отклонённые замечания ревью
