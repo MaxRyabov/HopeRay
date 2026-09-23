@@ -13,8 +13,9 @@ void main() {
     expect(find.textContaining('access key issued by your organization'), findsOneWidget);
 
     // "Show me how" -> hiddify.com/manager/ is gone, only "OK" is left
-    expect(find.byType(TextButton), findsOneWidget);
-    expect(find.text('OK'), findsOneWidget);
+    expect(find.widgetWithText(TextButton, 'OK'), findsOneWidget);
+    // ButtonStyleButton covers Text/Filled/Elevated/OutlinedButton, should "OK" ever move to one
+    expect(find.byWidgetPredicate((w) => w is ButtonStyleButton || w is IconButton), findsOneWidget);
     expect(find.textContaining('hiddify.com'), findsNothing);
     expect(find.textContaining(RegExp('free', caseSensitive: false)), findsNothing);
     expect(find.textContaining(RegExp('server', caseSensitive: false)), findsNothing);

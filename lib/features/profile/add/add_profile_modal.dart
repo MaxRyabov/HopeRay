@@ -56,7 +56,8 @@ class AddProfileOptions extends HookConsumerWidget {
         final fixBtnsHeight =
             (constraints.maxWidth - AddProfileModalConst.fixBtnsGap * AddProfileModalConst.fixBtnsGapCount) /
             AddProfileModalConst.fixBtnsItemCount;
-        // the sheet only holds the FixBtns row, with a gap above and below it
+        // the sheet only holds the FixBtns row, with a gap above and below it, and is
+        // deliberately rigid: same initial/min/max size, so there is nothing to drag open
         final fullHeight = fixBtnsHeight + AddProfileModalConst.fixBtnsGap * 2;
         final size = (fullHeight / constraints.maxHeight).clamp(0.0, 1.0);
         return DraggableScrollableSheet(
