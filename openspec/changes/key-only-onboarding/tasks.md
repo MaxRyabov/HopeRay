@@ -33,5 +33,5 @@
 
 ## 6. Проверка
 
-- [x] 6.1 CI зелёный (локально: `flutter analyze` 0 ошибок, `flutter test` 32/32): шаг `flutter analyze` (без ошибок) и `flutter test`; на MR #6 прогон 35850195954 — `test` и все 6 сборок зелёные
+- [ ] 6.1 CI зелёный: шаг `flutter analyze` (без ошибок) и `flutter test`. Локально на HEAD `6626a883` — 0 ошибок / 361 info, тесты 32/32. Полный зелёный прогон был на `fc9b9866` (35855056999); прогоны на `52b68947` и `6626a883` не стартовали — биллинг Actions. Закрыть после зелёного прогона на финальном коммите
 - [x] 6.2 Grep по `lib/` и `assets/translations/`: нет `free_configs`, `hiddify.com/manager`, `freeSwitch`, `FreeProfile`
