@@ -13,7 +13,7 @@
 |---|---|---|---|---|
 | 1 | `stage/1-external-contacts` | remove-external-contacts | **слит 2026-09-23**, change заархивирован | #5 |
 | 2 | `stage/2-key-only-onboarding` | key-only-onboarding | **слит 2026-09-24** (merge `c154b989`); change не заархивирован — открыта 5.4 | #6 |
-| 3 | `stage/3a-hide-chain` | hide-chain-features (chain: UI, off, WARP-диалог, unblocker.mode, сброс в bootstrap) | **MR открыт** | — |
+| 3 | `stage/3a-hide-chain` | hide-chain-features (chain: UI, off, WARP-диалог, unblocker.mode, сброс в bootstrap) | **MR открыт** | #7 |
 | 4 | `stage/3b-keyless-profiles` | hide-chain-features (WARP/Psiphon-профили, ошибки, json editor) | план | — |
 | 5 | `stage/4-remove-sentry` | disable-telemetry-by-default | план | — |
 | 6 | `stage/5-positioning-texts` | neutral-positioning-texts | план | — |
@@ -22,7 +22,7 @@
 
 ## Текущий этап
 
-Этап 3a, `stage/3a-hide-chain` (от `feat/corporate-access-client` на `0ac712bc`), change `hide-chain-features`, часть про chain.
+Этап 3a, `stage/3a-hide-chain`, MR #7 (коммит `c3afb030`), ответвлён от `feat/corporate-access-client` на `0ac712bc`, change `hide-chain-features`, часть про chain.
 
 Закрыто в `tasks.md`: 1.1–1.4, 1.6a (сброс chain), 2.1–2.2, 3.1–3.3, 4.1–4.7, 4.9a, 5.1. На этап 3b: 1a.*, 1.6b, 4.8, 4.9b. На пользователе: 1.5, 5.3–5.8 (ручные).
 
