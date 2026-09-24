@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hiddify/features/profile/data/profile_parser.dart';
 import 'package:hiddify/features/profile/model/profile_entity.dart';
@@ -218,6 +220,40 @@ void main() {
         expect(headers.containsKey("support-url"), false);
         expect(headers.containsKey("profile-web-page-url"), false);
       });
+    });
+  });
+
+  group("profileOverride with chain features disabled", () {
+    test("enable-warp header does not switch chain on", () {
+      final override = ProfileParser.profileOverride(populatedHeaders: {"enable-warp": "true"}, userOverride: null);
+      final map = jsonDecode(override) as Map<String, dynamic>;
+      expect(map.containsKey("chain-status"), false);
+      expect(map.containsKey("extra-security"), false);
+    });
+
+    test("UserOverride.enableWarp does not switch chain on", () {
+      final override = ProfileParser.profileOverride(
+        populatedHeaders: null,
+        userOverride: const UserOverride(enableWarp: true),
+      );
+      final map = jsonDecode(override) as Map<String, dynamic>;
+      expect(map.containsKey("chain-status"), false);
+      expect(map.containsKey("extra-security"), false);
+    });
+
+    test("direct chain keys are dropped, other overrides are kept", () {
+      final override = ProfileParser.profileOverride(
+        populatedHeaders: {
+          "chain-status": "extra_security",
+          "extra-security": {"mode": "warp"},
+          "enable-fragment": "true",
+        },
+        userOverride: null,
+      );
+      final map = jsonDecode(override) as Map<String, dynamic>;
+      expect(map.containsKey("chain-status"), false);
+      expect(map.containsKey("extra-security"), false);
+      expect(map["tls-tricks"], equals({"enable-fragment": true}));
     });
   });
 }

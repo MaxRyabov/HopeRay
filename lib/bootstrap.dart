@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hiddify/core/analytics/analytics_controller.dart';
 import 'package:hiddify/core/app_info/app_info_provider.dart';
 import 'package:hiddify/core/directories/directories_provider.dart';
@@ -23,6 +24,8 @@ import 'package:hiddify/features/log/data/log_data_providers.dart';
 import 'package:hiddify/features/profile/data/profile_data_providers.dart';
 import 'package:hiddify/features/profile/notifier/active_profile_notifier.dart';
 import 'package:hiddify/features/proxy/active/active_proxy_notifier.dart';
+import 'package:hiddify/features/settings/data/chain_guard.dart';
+import 'package:hiddify/features/settings/data/config_option_data_providers.dart';
 import 'package:hiddify/features/system_tray/notifier/system_tray_notifier.dart';
 import 'package:hiddify/features/window/notifier/window_notifier.dart';
 import 'package:hiddify/hiddifycore/hiddify_core_service_provider.dart';
@@ -98,6 +101,24 @@ Future<void> lazyBootstrap(WidgetsBinding widgetsBinding, Environment env) async
     () => container.read(chainProfileNotifierProvider(ChainType.unblocker).future),
   );
   await _safeInit("hiddify-core", () => container.read(hiddifyCoreServiceProvider).init());
+  await _safeInit("chain reset", () async {
+    if (!await resetDisabledChainStatus(container)) return;
+    Logger.bootstrap.info("stored chain status reset to off, chain features are disabled");
+    final activeProfile = await container.read(activeProfileProvider.future);
+    final result =
+        await TaskEither.fromEither(
+              container.read(configOptionRepositoryProvider).fullOptionsOverrided(activeProfile?.profileOverride()),
+            )
+            .mapLeft((failure) => "cannot build core options: $failure")
+            .flatMap(
+              (options) => container
+                  .read(hiddifyCoreServiceProvider)
+                  .changeOptions(options)
+                  .mapLeft((error) => "core rejected options: $error"),
+            )
+            .run();
+    result.match((error) => Logger.bootstrap.warning("chain reset: $error"), (_) {});
+  }, timeout: 3000);
 
   // Eagerly listen to activeProxyNotifierProvider to force synchronous evaluation in microtasks,
   // avoiding lazy build-phase flushes and sibling dependency collisions on the Home page.

@@ -13,7 +13,7 @@
 |---|---|---|---|---|
 | 1 | `stage/1-external-contacts` | remove-external-contacts | **слит 2026-09-23**, change заархивирован | #5 |
 | 2 | `stage/2-key-only-onboarding` | key-only-onboarding | **слит 2026-09-24** (merge `c154b989`); change не заархивирован — открыта 5.4 | #6 |
-| 3 | `stage/3a-hide-chain` | hide-chain-features (chain: UI, off, WARP-диалог, unblocker.mode, сброс в bootstrap) | план | — |
+| 3 | `stage/3a-hide-chain` | hide-chain-features (chain: UI, off, WARP-диалог, unblocker.mode, сброс в bootstrap) | **MR открыт** | — |
 | 4 | `stage/3b-keyless-profiles` | hide-chain-features (WARP/Psiphon-профили, ошибки, json editor) | план | — |
 | 5 | `stage/4-remove-sentry` | disable-telemetry-by-default | план | — |
 | 6 | `stage/5-positioning-texts` | neutral-positioning-texts | план | — |
@@ -22,15 +22,13 @@
 
 ## Текущий этап
 
-Этап 2, `stage/2-key-only-onboarding`. Цикл замечаний пройден (4 круга) плюс два разбора /mr-fix. Задачи 1.1–4.2, 5.1–5.3, 6.1, 6.2 из `tasks.md` закрыты.
+Этап 3a, `stage/3a-hide-chain` (от `feat/corporate-access-client` на `0ac712bc`), change `hide-chain-features`, часть про chain.
 
-**CI подтверждён 2026-09-24, MR готов к слиянию.** Код MR финализирован коммитом `6626a883`; всё, что после, — только документация, кода не касается. Зелёные прогоны на этом коде: 35873142214 (`7e5306b0`) и 35998362139 (`ddc51297`) — в обоих `test` и все 6 сборок. Task 6.1 закрыт. Осталась только 5.4 — ручная проверка на пользователе.
+Закрыто в `tasks.md`: 1.1–1.4, 1.6a (сброс chain), 2.1–2.2, 3.1–3.3, 4.1–4.7, 4.9a, 5.1. На этап 3b: 1a.*, 1.6b, 4.8, 4.9b. На пользователе: 1.5, 5.3–5.8 (ручные).
 
-Формулировка намеренно привязана к последнему коммиту с кодом, а не к HEAD: каждый документационный push в этом PR запускает новый прогон (см. «Решения» про `paths-ignore`), и запись, привязанная к HEAD, устаревала бы от собственного коммита.
+Локально: `flutter analyze` — 0 ошибок, 366 info/warning (+5 к 361: `depend_on_referenced_packages` в пяти новых тест-файлах, тот же долг из-за закомментированного `flutter_test` в `pubspec.yaml`); `flutter test` — 52/52. Контроль: при `kChainFeaturesEnabled = true` падают все 10 тестов, зависящих от флага.
 
-История красного CI (разобрана, кода не касалась): прогоны на `52b68947`, `6626a883` и `7e5306b0` падали за 20–40 с с аннотацией «The job was not started because recent account payments have failed or your spending limit needs to be increased» — job не стартовал. Лечилось не кодом: пользователь вернул репозиторий в public, минуты Actions публичным репозиториям не тарифицируются, и перезапуск того же прогона прошёл зелёным. Осталось: 5.4 (ручная проверка на пользователе); 6.1 закрыт — CI на MR #6 зелёный целиком. MR #6 в `feat/corporate-access-client`, коммит e5b1dd75.
-
-Локальная проверка на коммите этапа: `flutter analyze` — 0 ошибок, 361 info/warning; `flutter test` — 32/32 зелёные.
+Этап 2: задача 5.4 (ручная проверка диалога «нет профиля») по-прежнему открыта, `key-only-onboarding` не заархивирован — см. «Блокер».
 
 ## Блокер ручных проверок на Windows
 
@@ -61,6 +59,14 @@
 - Этап 2: высота листа `AddProfileOptions` теперь фиксированная — `fixBtnsHeight + fixBtnsGap * 2`, доля от экрана зажата в `clamp(0.0, 1.0)`. Ветки `freeSwitch` и `isDesktop` в расчёте высоты ушли вместе с `NavBar`; на десктопе лист и раньше был нерастягиваемым.
 - Этап 2, сверх `tasks.md`: убран лишний импорт `hooks_riverpod` из `profile_notifier.dart` (после удаления free-провайдеров он стал избыточным, анализатор давал `unnecessary_import`), и удалён весь закомментированный `switch`-рукав в `home_page.dart`, а не одна строка: обе его ветки ссылались на несуществующие виджеты.
 - Этап 2: `depend_on_referenced_packages` на `flutter_test` в двух новых тестах — то же замечание, что у всех пяти существующих тестовых файлов: в `pubspec.yaml` `dev_dependencies.flutter_test` закомментирован. Однострочная правка чинит все семь, но тянет `flutter pub get` и `pubspec.lock` на 6 платформах; вынесено в долг анализатора, не трогалось в этом MR.
+
+- Этап 3a: 1.6 реализован до ручной 1.5 (Android, плитка). Сброс настройки и отправка опций ядру безвредны при любом ответе на 1.5, а требование спеки «сохранённый chain сбрасывается при запуске» от 1.5 не зависит; 1.5 остаётся проверкой, что этого достаточно.
+- Этап 3a: фикстура `SingboxConfigOption` — фабрика `test/helpers/config_options.dart` (реальный провайдер на моках, `rulesNotifierProvider` подменён пустым списком) вместо JSON в `test/fixtures/`; design.md допускает оба варианта, фабрика не устаревает при изменении модели.
+- Этап 3a: `requiresWarpConsent` — top-level функция в `connection_repository.dart`, `switch` по `chainStatus`: режим проверяется только у активной ступени.
+- Этап 3a: `resetDisabledChainStatus(ProviderContainer)` в `lib/features/settings/data/chain_guard.dart` возвращает, был ли сброс; отправка опций ядру — в `bootstrap.dart` (`_safeInit`, таймаут 3 с), ошибки только логируются: даже без неё `fullOptionsOverrided` гарантирует `off` при следующем подключении из приложения.
+- Этап 3a: `ProfileParser.profileOverride` при выключенном флаге удаляет и прямые ключи `chain-status`/`extra-security` из `populatedHeaders`, не только результат `enable-warp`.
+- Этап 3a: `SettingsPage` при выключенном флаге больше не подписывается на `hasAnyProfileProvider` (условие `kChainFeaturesEnabled && …` короткозамкнуто) — поэтому тест проверяет предусловие через `.future`.
+- Для этапа 3b: текст ошибки расходится — спека (`specs/chain-features/spec.md`) «профили Cloudflare WARP и Psiphon недоступны», `tasks.md` 1a.4 «профили Cloudflare WARP недоступны». Решить до 1a.4.
 
 ## Круги замечаний
 
