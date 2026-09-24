@@ -12,7 +12,7 @@
 | # | Этап / подветка | OpenSpec change | Статус | MR |
 |---|---|---|---|---|
 | 1 | `stage/1-external-contacts` | remove-external-contacts | **слит 2026-09-23**, change заархивирован | #5 |
-| 2 | `stage/2-key-only-onboarding` | key-only-onboarding | готов к слиянию: замечания разобраны, CI на HEAD `7e5306b0` зелёный | #6 |
+| 2 | `stage/2-key-only-onboarding` | key-only-onboarding | **слит 2026-09-24** (merge `c154b989`); change не заархивирован — открыта 5.4 | #6 |
 | 3 | `stage/3a-hide-chain` | hide-chain-features (chain: UI, off, WARP-диалог, unblocker.mode, сброс в bootstrap) | план | — |
 | 4 | `stage/3b-keyless-profiles` | hide-chain-features (WARP/Psiphon-профили, ошибки, json editor) | план | — |
 | 5 | `stage/4-remove-sentry` | disable-telemetry-by-default | план | — |
@@ -31,6 +31,14 @@
 История красного CI (разобрана, кода не касалась): прогоны на `52b68947`, `6626a883` и `7e5306b0` падали за 20–40 с с аннотацией «The job was not started because recent account payments have failed or your spending limit needs to be increased» — job не стартовал. Лечилось не кодом: пользователь вернул репозиторий в public, минуты Actions публичным репозиториям не тарифицируются, и перезапуск того же прогона прошёл зелёным. Осталось: 5.4 (ручная проверка на пользователе); 6.1 закрыт — CI на MR #6 зелёный целиком. MR #6 в `feat/corporate-access-client`, коммит e5b1dd75.
 
 Локальная проверка на коммите этапа: `flutter analyze` — 0 ошибок, 361 info/warning; `flutter test` — 32/32 зелёные.
+
+## Блокер ручных проверок на Windows
+
+`flutter run -d windows` не собирается: «Building with plugins requires symlink support». Нужен режим разработчика Windows — `start ms-settings:developers`. Действие пользователя, из сессии не выполняется.
+
+Нативное ядро для десктопа уже скачано (`make` на машине нет, команда выполнена напрямую): `hiddify-core/bin/` содержит `hiddify-core.dll`, `libcronet.dll`, `HiddifyCli.exe` версии 4.1.0. Повторно качать не нужно.
+
+Пока блокер не снят, задача 5.4 этапа 2 не закрыта и change `key-only-onboarding` не заархивирован.
 
 ## Как тестируем
 
