@@ -46,7 +46,7 @@
 ## 5. Проверка
 
 - [x] 5.1 `dart run build_runner build --delete-conflicting-outputs` — этап 3a не меняет входов кодогенерации (freezed, `@riverpod`, drift, переводы); на 3b понадобится из-за новых вариантов ошибок
-- [ ] 5.2 CI зелёный: шаг `flutter analyze` (без ошибок) и `flutter test`
+- [x] 5.2 CI зелёный: шаг `flutter analyze` (без ошибок) и `flutter test` — MR #7, прогон 36014697769, плюс все 6 сборок
 - [ ] 5.3 Вручную: чистая установка → добавить ключ → подключиться. Диалог WARP не появляется, в настройках и быстрых настройках нет chain
 - [ ] 5.4 Вручную: быстрые настройки без Extra security / Unblocker / WARP / Psiphon
 - [ ] 5.5 Вручную: переход на `/settings/chain-options` (через `context.go` в debug-сборке) не открывает экран chain
