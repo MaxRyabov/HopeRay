@@ -20,7 +20,6 @@ class HomePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final t = ref.watch(translationsProvider).requireValue;
-    // final hasAnyProfile = ref.watch(hasAnyProfileProvider);
     final activeProfile = ref.watch(activeProfileProvider);
 
     return Scaffold(
@@ -95,11 +94,8 @@ class HomePage extends HookConsumerWidget {
                 ),
                 child: CustomScrollView(
                   slivers: [
-                    // switch (activeProfile) {
-                    // AsyncData(value: final profile?) =>
                     MultiSliver(
                       children: [
-                        // const Gap(100),
                         switch (activeProfile) {
                           AsyncData(value: final profile?) => ProfileTile(
                             profile: profile,
@@ -128,13 +124,6 @@ class HomePage extends HookConsumerWidget {
                         ),
                       ],
                     ),
-                    // AsyncData() => switch (hasAnyProfile) {
-                    //     AsyncData(value: true) => const EmptyActiveProfileHomeBody(),
-                    //     _ => const EmptyProfilesHomeBody(),
-                    //   },
-                    // AsyncError(:final error) => SliverErrorBodyPlaceholder(t.presentShortError(error)),
-                    // _ => const SliverToBoxAdapter(),
-                    // },
                   ],
                 ),
               ),

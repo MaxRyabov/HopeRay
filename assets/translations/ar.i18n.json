@@ -22,10 +22,8 @@
     "clipboard": "الحافظة",
     "addToClipboard": "إضافة إلى الحافظة",
     "scanQr": "مسح رمز QR",
-    "free": "مجاني",
     "warp": "WARP",
     "fragment": "Fragment",
-    "help": "مساعدة",
     "save": "حفظ",
     "update": "تحديث",
     "share": "مشاركة",
@@ -138,8 +136,6 @@
       "viewAllProfiles": "عرض جميع الملفات الشخصية",
       "activeProfileName": "اسم الملف النشط: \"${name}\".",
       "nonActiveProfileName": "تحديد \"${name}\" كملف نشط",
-      "freeSubNotFound": "لم يتم العثور على اشتراك مجاني",
-      "freeSubNotFoundForRegion": "لم يتم العثور على اشتراك مجاني لمنطقة \"${region}\"",
       "failedToLoad": "فشل التحميل",
       "updateSubscriptions": "تحديث الاشتراكات",
       "share": {
@@ -630,12 +626,8 @@
       "disable": "لا تعرض مرة أخرى"
     },
     "noActiveProfile": {
-      "title": "اختر ملفًا شخصيًا",
-      "msg": "للبدء، قم بإضافة ملف اتصال يحتوي على تفاصيل اتصال VPN الخاصة بك.\n\nأليس لديك خادم VPN بعد؟ لا تقلق، اتبع الدليل أدناه لإعداد واحد بسرعة ومجانًا.",
-      "helpBtn": {
-        "label": "أرني كيف",
-        "url": "https://hiddify.com/manager/"
-      }
+      "title": "أضف مفتاح الوصول",
+      "msg": "للاتصال، أضف مفتاح الوصول الذي أصدرته مؤسستك."
     },
     "proxyInfo": {
       "fullTag": "العلامة الكاملة:",

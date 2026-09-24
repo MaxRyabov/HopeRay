@@ -5,7 +5,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hiddify/core/localization/translations.dart';
 import 'package:hiddify/core/model/constants.dart';
-import 'package:hiddify/features/profile/add/widgets/free_btns.dart';
 import 'package:hiddify/features/profile/add/widgets/widgets.dart';
 import 'package:hiddify/features/profile/model/profile_entity.dart';
 import 'package:hiddify/features/profile/notifier/profile_notifier.dart';
@@ -21,7 +20,6 @@ class AddProfileModal extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = ref.watch(addProfileNotifierProvider).isLoading;
     final currentWidget = ref.watch(addProfilePageNotifierProvider);
-    ref.listen(freeSwitchNotifierProvider, (_, _) {});
     ref.listen(addProfileNotifierProvider, (previous, next) {
       if (next case AsyncData(value: final _?)) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -53,32 +51,25 @@ class AddProfileOptions extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final isLoadingProfile = ref.watch(addProfileNotifierProvider).isLoading;
-    final freeSwitch = ref.watch(freeSwitchNotifierProvider);
-    final isDesktop = PlatformUtils.isDesktop;
     return LayoutBuilder(
       builder: (context, constraints) {
         final fixBtnsHeight =
             (constraints.maxWidth - AddProfileModalConst.fixBtnsGap * AddProfileModalConst.fixBtnsGapCount) /
             AddProfileModalConst.fixBtnsItemCount;
-        final fullHeight = fixBtnsHeight + AddProfileModalConst.navBarHeight + 32;
-        final initial = !freeSwitch ? fullHeight : fullHeight + 180;
-        var min = !freeSwitch ? fullHeight : fullHeight + 100;
-        var max = !freeSwitch ? fullHeight / constraints.maxHeight : 0.85;
-        if (isDesktop) {
-          min = initial;
-          max = initial / constraints.maxHeight;
-        }
+        // the sheet only holds the FixBtns row, with a gap above and below it, and is
+        // deliberately rigid: same initial/min/max size, so there is nothing to drag open
+        final fullHeight = fixBtnsHeight + AddProfileModalConst.fixBtnsGap * 2;
+        final size = (fullHeight / constraints.maxHeight).clamp(0.0, 1.0);
         return DraggableScrollableSheet(
-          initialChildSize: initial / constraints.maxHeight,
-          minChildSize: min / constraints.maxHeight,
-          maxChildSize: max,
+          initialChildSize: size,
+          minChildSize: size,
+          maxChildSize: size,
           expand: false,
-          builder: (context, scrollController) => Column(
+          builder: (context, _) => Column(
             children: [
               const Gap(AddProfileModalConst.fixBtnsGap),
               FixBtns(height: fixBtnsHeight),
-              if (freeSwitch) Expanded(child: FreeBtns(scrollController: scrollController)) else const Spacer(),
-              const NavBar(),
+              const Spacer(),
             ],
           ),
         );

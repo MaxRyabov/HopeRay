@@ -22,10 +22,8 @@
     "clipboard": "Clipboard",
     "addToClipboard": "Add to clipboard",
     "scanQr": "Scan QR",
-    "free": "Free",
     "warp": "WARP",
     "fragment": "Fragment",
-    "help": "Help",
     "save": "Save",
     "update": "Update",
     "share": "Share",
@@ -132,8 +130,6 @@
       "viewAllProfiles": "View all profiles",
       "activeProfileName": "Active profile name: \"${name}\".",
       "nonActiveProfileName": "Select \"${name}\" as active profile",
-      "freeSubNotFound": "No free subscription was found",
-      "freeSubNotFoundForRegion": "No free subscription was found for \"${region}\" region.",
       "failedToLoad": "Failed to load",
       "updateSubscriptions": "Update subscriptions",
       "share": {
@@ -624,12 +620,8 @@
       "disable": "Don't show again"
     },
     "noActiveProfile": {
-      "title": "Choose a profile",
-      "msg": "Let's get started by adding a connection profile that includes your VPN connection details.\n\nDon’t have a VPN server yet? No worries—just follow the tutorial below to set one up quickly and for free.",
-      "helpBtn": {
-        "label": "Show me how",
-        "url": "https://hiddify.com/manager/"
-      }
+      "title": "Add an access key",
+      "msg": "To connect, add the access key issued by your organization."
     },
     "proxyInfo": {
       "fullTag": "Full tag:",
