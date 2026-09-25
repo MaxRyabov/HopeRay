@@ -13,7 +13,7 @@
 |---|---|---|---|---|
 | 1 | `stage/1-external-contacts` | remove-external-contacts | **слит 2026-09-23**, change заархивирован | #5 |
 | 2 | `stage/2-key-only-onboarding` | key-only-onboarding | **слит 2026-09-24** (merge `c154b989`); change не заархивирован — открыта 5.4 | #6 |
-| 3 | `stage/3a-hide-chain` | hide-chain-features (chain: UI, off, WARP-диалог, unblocker.mode, сброс в bootstrap) | **ждёт слияния** (цикл замечаний закрыт, CI зелёный) | #7 |
+| 3 | `stage/3a-hide-chain` | hide-chain-features (chain: UI, off, WARP-диалог, unblocker.mode, сброс в bootstrap) | **слит 2026-09-25** (merge `40a9d9c4`); change не заархивирован — впереди 3b | #7 |
 | 4 | `stage/3b-keyless-profiles` | hide-chain-features (WARP/Psiphon-профили, ошибки, json editor) | план | — |
 | 5 | `stage/4-remove-sentry` | disable-telemetry-by-default | план | — |
 | 6 | `stage/5-positioning-texts` | neutral-positioning-texts | план | — |
@@ -22,15 +22,13 @@
 
 ## Текущий этап
 
-Этап 3a, `stage/3a-hide-chain`, MR #7 (коммит `c3afb030`), ответвлён от `feat/corporate-access-client` на `0ac712bc`, change `hide-chain-features`, часть про chain.
+Этап 3a слит 2026-09-25 (MR #7, merge `40a9d9c4`, код на `2715ecd1`, CI зелёный целиком — прогон 36133734857). Следующий — этап 3b, `stage/3b-keyless-profiles` от `feat/corporate-access-client`, change `hide-chain-features`: задачи 1a.1–1a.6, 1.6b, 4.8, 4.9b, затем `openspec archive hide-chain-features`.
 
-Закрыто в `tasks.md`: 1.1–1.4, 1.6a (сброс chain), 2.1–2.2, 3.1–3.3, 4.1–4.7, 4.9a, 5.1, 5.2. На этап 3b: 1a.*, 1.6b, 4.8, 4.9b. На пользователе: 1.5, 5.3–5.8 (ручные).
+Итог 3a в `tasks.md`: закрыты 1.1–1.4, 1.6a, 2.1–2.2, 3.1–3.3, 4.1–4.7, 4.9a, 5.1, 5.2. На пользователе: 1.5, 5.3–5.8 (ручные, Android и Windows). Локально на коде этапа: `flutter analyze` 0 ошибок / 366 info-warning, `flutter test` 55/55.
 
-Локально: `flutter analyze` — 0 ошибок, 366 info/warning (+5 к 361: `depend_on_referenced_packages` в пяти новых тест-файлах, тот же долг из-за закомментированного `flutter_test` в `pubspec.yaml`); `flutter test` — 52/52 (после /mr-fix — 55/55). Контроль: при `kChainFeaturesEnabled = true` падают все 10 тестов, зависящих от флага.
+До 3b решить: (1) как проверять Android-специфику — Android SDK локально или выгрузка APK из CI; (2) текст ошибки 1a.4 — спека говорит «WARP и Psiphon», tasks.md только «WARP» (рекомендация — вариант спеки).
 
-**Цикл замечаний (4 круга) закрыт 2026-09-24 без замечаний — ревью «Мишки» пришло позже и разобрано двумя /mr-fix 2026-09-25 (см. «Круги замечаний»). Состояние CI — по последнему коммиту с кодом, см. последнюю запись разбора. MR #7 ждёт слияния пользователем.**
-
-Этап 2: задача 5.4 (ручная проверка диалога «нет профиля») по-прежнему открыта, `key-only-onboarding` не заархивирован — см. «Блокер».
+Этап 2: задача 5.4 (ручная проверка диалога «нет профиля») по-прежнему открыта, `key-only-onboarding` не заархивирован — см. «Блокер». Предложено закрыть автотестом на `ConnectionButton` отдельным маленьким MR — ждёт решения пользователя.
 
 ## Блокер ручных проверок на Windows
 
@@ -70,6 +68,8 @@
 - Этап 3a: `ProfileParser.profileOverride` при выключенном флаге удаляет и прямые ключи `chain-status`/`extra-security` из `populatedHeaders`, не только результат `enable-warp`.
 - Этап 3a: `SettingsPage` при выключенном флаге больше не подписывается на `hasAnyProfileProvider` (условие `kChainFeaturesEnabled && …` короткозамкнуто) — поэтому тест проверяет предусловие через `.future`.
 - Для этапа 3b: текст ошибки расходится — спека (`specs/chain-features/spec.md`) «профили Cloudflare WARP и Psiphon недоступны», `tasks.md` 1a.4 «профили Cloudflare WARP недоступны». Решить до 1a.4.
+- CI Android: плагины собираются против SDK-платформ 31 и 33; `build.yml` ставит их отдельным шагом через `sdkmanager` (3 попытки, проверка `android.jar`), иначе Gradle докачивает их посреди сборки без повтора и один битый архив валит сборку (MR #7, прогон 36130355362).
+- Бот «Мишка» может прийти с ревью после того, как цикл из 4 кругов закончился (на MR #7 — через ~16 ч, и после каждого push перепроверяет). Итог «замечаний нет — бот не отозвался» не значит, что ревью не будет: перед слиянием смотреть issue-комментарии MR.
 
 ## Круги замечаний
 
