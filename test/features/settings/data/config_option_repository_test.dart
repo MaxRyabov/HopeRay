@@ -50,6 +50,7 @@ void main() {
       final options = repo.fullOptionsOverrided('{"chain-status":"extra_security","extra-security":{"mode":"warp"}}');
 
       expect(chainStatusOf(options), ChainStatus.off);
+      expect(chainStatusOf(repo.fullOptionsOverrided('{"chain-status":"unblocker"}')), ChainStatus.off);
     });
 
     test('other profile overrides still apply', () {

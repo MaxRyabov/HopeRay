@@ -105,7 +105,7 @@ Future<void> lazyBootstrap(WidgetsBinding widgetsBinding, Environment env) async
     if (await resetDisabledChainStatus(container, applyToCore: () => _applyCoreOptions(container))) {
       Logger.bootstrap.info("stored chain status reset to off, chain features are disabled");
     }
-  }, timeout: 3000);
+  });
 
   // Eagerly listen to activeProxyNotifierProvider to force synchronous evaluation in microtasks,
   // avoiding lazy build-phase flushes and sibling dependency collisions on the Home page.
@@ -147,24 +147,36 @@ Future<void> lazyBootstrap(WidgetsBinding widgetsBinding, Environment env) async
 }
 
 /// Sends the current options with the active profile overrides to the core; `false` if they were not applied.
+///
+/// Only reading the active profile is time-limited: it changes nothing. `changeOptions` is awaited without a timeout,
+/// like the core init before it, so a late call can't overwrite options the app applies after startup.
 Future<bool> _applyCoreOptions(ProviderContainer container) async {
-  final activeProfile = await container.read(activeProfileProvider.future);
-  final result =
-      await TaskEither.fromEither(
-            container.read(configOptionRepositoryProvider).fullOptionsOverrided(activeProfile?.profileOverride()),
-          )
-          .mapLeft((failure) => "cannot build core options: $failure")
-          .flatMap(
-            (options) => container
-                .read(hiddifyCoreServiceProvider)
-                .changeOptions(options)
-                .mapLeft((error) => "core rejected options: $error"),
-          )
-          .run();
-  return result.match((error) {
-    Logger.bootstrap.warning("chain reset: $error, will retry on next launch");
+  try {
+    final result =
+        await TaskEither.tryCatch(
+              () => container.read(activeProfileProvider.future).timeout(const Duration(seconds: 1)),
+              (error, _) => "cannot read active profile: $error",
+            )
+            .flatMap(
+              (activeProfile) => TaskEither.fromEither(
+                container.read(configOptionRepositoryProvider).fullOptionsOverrided(activeProfile?.profileOverride()),
+              ).mapLeft((failure) => "cannot build core options: $failure"),
+            )
+            .flatMap(
+              (options) => container
+                  .read(hiddifyCoreServiceProvider)
+                  .changeOptions(options)
+                  .mapLeft((error) => "core rejected options: $error"),
+            )
+            .run();
+    return result.match((error) {
+      Logger.bootstrap.warning("chain reset: $error, will retry on next launch");
+      return false;
+    }, (_) => true);
+  } catch (e, stackTrace) {
+    Logger.bootstrap.warning("chain reset: core failed, will retry on next launch", e, stackTrace);
     return false;
-  }, (_) => true);
+  }
 }
 
 Future<T> _init<T>(String name, Future<T> Function() initializer, {int? timeout}) async {
