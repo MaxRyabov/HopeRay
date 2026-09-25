@@ -550,7 +550,7 @@ class ConfigOptionRepository with ExceptionHandler, InfraLogger {
           )
           .map(_enforceChainAvailability);
 
-  /// Последняя точка перед ядром: её не обходят ни сохранённые настройки, ни переопределения профиля.
+  /// The last point before the core: neither stored preferences nor profile overrides bypass it.
   SingboxConfigOption _enforceChainAvailability(SingboxConfigOption options) =>
       kChainFeaturesEnabled ? options : options.copyWith(chainStatus: ChainStatus.off);
 }

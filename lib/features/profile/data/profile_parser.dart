@@ -418,7 +418,7 @@ class ProfileParser {
     final headers = Map<String, dynamic>.from(populatedHeaders ?? {});
 
     if (!kChainFeaturesEnabled) {
-      // Chain скрыт: ни подписка, ни пользователь не включают его через переопределения профиля.
+      // Chain is hidden: neither the subscription nor the user can switch it on via profile overrides.
       headers
         ..remove('chain-status')
         ..remove('extra-security');

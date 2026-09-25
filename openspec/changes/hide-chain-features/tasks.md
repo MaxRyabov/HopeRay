@@ -6,7 +6,7 @@
 - [x] 1.4 В `ConfigOptions.singboxConfigOptions` исправить `SingboxUnblockerOption.mode` на `ref.watch(unblockerMode)`
 - [ ] 1.5 Вручную на Android подтвердить, что туннель, поднятый плиткой быстрых настроек без открытия приложения, использует последние опции и профиль, переданные ядру из приложения. От результата зависит 1.6
 - [ ] 1.6 В `bootstrap.dart` после инициализации ядра: при выключенном флаге и сохранённом `chain-status` не `off` сбросить настройку в `off`; если файл активного профиля не проходит `containsKeylessEgress`, снять с профиля активность; в обоих случаях отправить ядру актуальное состояние
-  - [x] 1.6a Сброс `chain-status` и отправка опций ядру — этап 3a (`resetDisabledChainStatus`, `lib/features/settings/data/chain_guard.dart`)
+  - [x] 1.6a Сброс `chain-status` и отправка опций ядру — этап 3a (`resetDisabledChainStatus`, `lib/features/settings/data/chain_guard.dart`): сначала опции ядру, настройка пишется только при успехе
   - [ ] 1.6b Снятие активности с WARP/Psiphon-профиля — этап 3b, нужен `containsKeylessEgress`
 
 ## 1a. Профили без ключа (WARP, Psiphon)
@@ -40,7 +40,7 @@
 - [x] 4.7 Widget-тест `SettingsPage` (через `test/helpers/pump_app.dart`) с оверрайдом `hasAnyProfileProvider` → `true` (иначе пункт скрыт и без изменений): нет текста `t.pages.settings.chain.title`
 - [ ] 4.8 Unit `containsKeylessEgress` (фикстуры в `test.configs/warp`, `test.configs/warp2`): `warp://auto#WARP` → true; `psiphon://auto/` → true; base64 от строки с `warp://` → true; JSON с endpoint `type: warp` → true; JSON с outbound `type: psiphon` → true; `vless://…` → false; JSON, где `warp` только в поле `tag` → false
 - [ ] 4.9 Unit: bootstrap-логика сброса (вынесенная в функцию) при сохранённом `extraSecurity` записывает `off`, при `off` ничего не пишет; при активном профиле с `warp://` снимает активность, при `vless://` не трогает
-  - [x] 4.9a Сброс chain: `extraSecurity`/`unblocker` → `off`, при `off` и без сохранённого значения ничего не пишет — этап 3a
+  - [x] 4.9a Сброс chain: `extraSecurity`/`unblocker` → `off` после успешной отправки ядру; при отказе или исключении ядра настройка сохраняется; при `off` и без сохранённого значения ядро не вызывается и ничего не пишется — этап 3a
   - [ ] 4.9b Снятие активности с профиля `warp://` / сохранение `vless://` — этап 3b
 
 ## 5. Проверка

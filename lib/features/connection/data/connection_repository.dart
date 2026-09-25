@@ -16,9 +16,9 @@ import 'package:hiddify/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
 
-/// Согласие с лицензией Cloudflare WARP нужно, только если chain включён и его активная ступень работает через WARP.
-/// Режимы ступеней хранятся и при выключенном chain (`extraSecurityMode` по умолчанию `warp`), поэтому
-/// смотреть на один `mode` без `chainStatus` нельзя.
+/// Cloudflare WARP license consent is needed only if chain is on and its active stage goes through WARP.
+/// Stage modes are kept even with chain off (`extraSecurityMode` defaults to `warp`), so `mode` alone
+/// without `chainStatus` is not enough.
 bool requiresWarpConsent(SingboxConfigOption options) => switch (options.chainStatus) {
   ChainStatus.off => false,
   ChainStatus.extraSecurity => options.extraSecurity.mode.isWarp(),

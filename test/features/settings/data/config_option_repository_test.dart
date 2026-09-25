@@ -40,6 +40,8 @@ void main() {
       final repo = repositoryWith(defaults.copyWith(chainStatus: ChainStatus.unblocker));
 
       expect(chainStatusOf(repo.fullOptionsOverrided(null)), ChainStatus.off);
+      expect(chainStatusOf(repo.fullOptionsOverrided('{}')), ChainStatus.off);
+      expect(chainStatusOf(repo.fullOptions()), ChainStatus.off);
     });
 
     test('profile override cannot switch chain on', () {
@@ -60,10 +62,12 @@ void main() {
   });
 
   test('unblocker mode is taken from its own preference', () async {
-    final container = await configOptionsContainer(prefs: {'extra-security-mode': 'warp', 'unblocker-mode': 'psiphon'});
-    addTearDown(container.dispose);
+    final modesContainer = await configOptionsContainer(
+      prefs: {'extra-security-mode': 'warp', 'unblocker-mode': 'psiphon'},
+    );
+    addTearDown(modesContainer.dispose);
 
-    final options = container.read(ConfigOptions.singboxConfigOptions);
+    final options = modesContainer.read(ConfigOptions.singboxConfigOptions);
 
     expect(options.extraSecurity.mode, ChainMode.warp);
     expect(options.unblocker.mode, ChainMode.psiphon);
