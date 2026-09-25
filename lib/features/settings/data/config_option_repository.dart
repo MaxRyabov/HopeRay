@@ -1,5 +1,6 @@
 import 'package:dartx/dartx.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:hiddify/core/model/constants.dart';
 import 'package:hiddify/core/model/optional_range.dart';
 import 'package:hiddify/core/model/region.dart';
 import 'package:hiddify/core/utils/exception_handler.dart';
@@ -508,7 +509,7 @@ abstract class ConfigOptions {
         profile: SingboxExtraSecurityProfileOption(id: ref.watch(extraSecurityProfileId)),
       ),
       unblocker: SingboxUnblockerOption(
-        mode: ref.watch(extraSecurityMode),
+        mode: ref.watch(unblockerMode),
         warp: SingboxUnblockerWarpOption(
           licenseKey: ref.watch(unblockerWarpLicenseKey),
           cleanIp: ref.watch(unblockerWarpCleanIp),
@@ -537,13 +538,19 @@ class ConfigOptionRepository with ExceptionHandler, InfraLogger {
   final SingboxConfigOption Function() _getConfigOptions;
 
   Either<ConfigOptionFailure, SingboxConfigOption> fullOptions() =>
-      Either.tryCatch(() => _getConfigOptions(), ConfigOptionFailure.unexpected);
+      Either.tryCatch(() => _getConfigOptions(), ConfigOptionFailure.unexpected).map(_enforceChainAvailability);
 
   Either<ConfigOptionFailure, SingboxConfigOption> fullOptionsOverrided(String? profileOverride) =>
-      Either.tryCatch(() => _getConfigOptions(), ConfigOptionFailure.unexpected).flatMap(
-        (options) => Either.tryCatch(() {
-          final json = ProfileParser.applyProfileOverride(options.toJson(), profileOverride);
-          return SingboxConfigOption.fromJson(json);
-        }, ConfigOptionFailure.unexpected),
-      );
+      Either.tryCatch(() => _getConfigOptions(), ConfigOptionFailure.unexpected)
+          .flatMap(
+            (options) => Either.tryCatch(() {
+              final json = ProfileParser.applyProfileOverride(options.toJson(), profileOverride);
+              return SingboxConfigOption.fromJson(json);
+            }, ConfigOptionFailure.unexpected),
+          )
+          .map(_enforceChainAvailability);
+
+  /// The last point before the core: neither stored preferences nor profile overrides bypass it.
+  SingboxConfigOption _enforceChainAvailability(SingboxConfigOption options) =>
+      kChainFeaturesEnabled ? options : options.copyWith(chainStatus: ChainStatus.off);
 }

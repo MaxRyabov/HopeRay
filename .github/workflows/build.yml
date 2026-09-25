@@ -196,6 +196,20 @@ jobs:
         with:
           # the default "tools platform-tools" fails: the legacy "tools" package no longer exists
           packages: platform-tools
+      - name: Install Android SDK platforms required by plugins
+        if: startsWith(matrix.platform,'android')
+        # Plugins compile against platforms 31 and 33 (e.g. flutter_displaymode). Without them Gradle downloads the
+        # platforms mid-build with no retry, and one corrupt download ("Archive is not a ZIP archive") fails the build.
+        run: |
+          # `yes` dies of SIGPIPE, which fails the pipe under pipefail, so licenses are accepted separately
+          yes | sdkmanager --licenses > /dev/null || true
+          for attempt in 1 2 3; do
+            sdkmanager --install "platforms;android-31" "platforms;android-33" > /dev/null && break
+            echo "sdkmanager failed (attempt $attempt), retrying"
+            sleep 15
+          done
+          test -f "$ANDROID_HOME/platforms/android-31/android.jar"
+          test -f "$ANDROID_HOME/platforms/android-33/android.jar"
       # - name: Cache Android SDK
       #   uses: actions/cache@v5
       #   if: startsWith(matrix.platform,'android')

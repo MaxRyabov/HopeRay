@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hiddify/core/analytics/analytics_controller.dart';
 import 'package:hiddify/core/app_info/app_info_provider.dart';
 import 'package:hiddify/core/directories/directories_provider.dart';
@@ -23,6 +24,8 @@ import 'package:hiddify/features/log/data/log_data_providers.dart';
 import 'package:hiddify/features/profile/data/profile_data_providers.dart';
 import 'package:hiddify/features/profile/notifier/active_profile_notifier.dart';
 import 'package:hiddify/features/proxy/active/active_proxy_notifier.dart';
+import 'package:hiddify/features/settings/data/chain_guard.dart';
+import 'package:hiddify/features/settings/data/config_option_data_providers.dart';
 import 'package:hiddify/features/system_tray/notifier/system_tray_notifier.dart';
 import 'package:hiddify/features/window/notifier/window_notifier.dart';
 import 'package:hiddify/hiddifycore/hiddify_core_service_provider.dart';
@@ -98,6 +101,11 @@ Future<void> lazyBootstrap(WidgetsBinding widgetsBinding, Environment env) async
     () => container.read(chainProfileNotifierProvider(ChainType.unblocker).future),
   );
   await _safeInit("hiddify-core", () => container.read(hiddifyCoreServiceProvider).init());
+  await _safeInit("chain reset", () async {
+    if (await resetDisabledChainStatus(container, applyToCore: () => _applyCoreOptions(container))) {
+      Logger.bootstrap.info("stored chain status reset to off, chain features are disabled");
+    }
+  });
 
   // Eagerly listen to activeProxyNotifierProvider to force synchronous evaluation in microtasks,
   // avoiding lazy build-phase flushes and sibling dependency collisions on the Home page.
@@ -136,6 +144,39 @@ Future<void> lazyBootstrap(WidgetsBinding widgetsBinding, Environment env) async
     FlutterNativeSplash.remove();
   }
   // SentryFlutter.s(DateTime.now().toUtc());
+}
+
+/// Sends the current options with the active profile overrides to the core; `false` if they were not applied.
+///
+/// Only reading the active profile is time-limited: it changes nothing. `changeOptions` is awaited without a timeout,
+/// like the core init before it, so a late call can't overwrite options the app applies after startup.
+Future<bool> _applyCoreOptions(ProviderContainer container) async {
+  try {
+    final result =
+        await TaskEither.tryCatch(
+              () => container.read(activeProfileProvider.future).timeout(const Duration(seconds: 1)),
+              (error, _) => "cannot read active profile: $error",
+            )
+            .flatMap(
+              (activeProfile) => TaskEither.fromEither(
+                container.read(configOptionRepositoryProvider).fullOptionsOverrided(activeProfile?.profileOverride()),
+              ).mapLeft((failure) => "cannot build core options: $failure"),
+            )
+            .flatMap(
+              (options) => container
+                  .read(hiddifyCoreServiceProvider)
+                  .changeOptions(options)
+                  .mapLeft((error) => "core rejected options: $error"),
+            )
+            .run();
+    return result.match((error) {
+      Logger.bootstrap.warning("chain reset: $error, will retry on next launch");
+      return false;
+    }, (_) => true);
+  } catch (e, stackTrace) {
+    Logger.bootstrap.warning("chain reset: core failed, will retry on next launch", e, stackTrace);
+    return false;
+  }
 }
 
 Future<T> _init<T>(String name, Future<T> Function() initializer, {int? timeout}) async {

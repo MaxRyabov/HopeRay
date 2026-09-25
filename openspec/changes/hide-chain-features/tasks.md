@@ -1,11 +1,13 @@
 ## 1. Флаг и принудительное выключение
 
-- [ ] 1.1 Добавить `kChainFeaturesEnabled = false` в `lib/core/model/constants.dart`
-- [ ] 1.2 В `ConfigOptionRepository.fullOptions()` и `fullOptionsOverrided()` при выключенном флаге возвращать опции с `chainStatus: ChainStatus.off`
-- [ ] 1.3 В `ProfileParser.profileOverride` при выключенном флаге игнорировать `enable-warp` и `UserOverride.enableWarp` и удалять `chain-status` и `extra-security` из результата
-- [ ] 1.4 В `ConfigOptions.singboxConfigOptions` исправить `SingboxUnblockerOption.mode` на `ref.watch(unblockerMode)`
+- [x] 1.1 Добавить `kChainFeaturesEnabled = false` в `lib/core/model/constants.dart`
+- [x] 1.2 В `ConfigOptionRepository.fullOptions()` и `fullOptionsOverrided()` при выключенном флаге возвращать опции с `chainStatus: ChainStatus.off`
+- [x] 1.3 В `ProfileParser.profileOverride` при выключенном флаге игнорировать `enable-warp` и `UserOverride.enableWarp` и удалять `chain-status` и `extra-security` из результата
+- [x] 1.4 В `ConfigOptions.singboxConfigOptions` исправить `SingboxUnblockerOption.mode` на `ref.watch(unblockerMode)`
 - [ ] 1.5 Вручную на Android подтвердить, что туннель, поднятый плиткой быстрых настроек без открытия приложения, использует последние опции и профиль, переданные ядру из приложения. От результата зависит 1.6
 - [ ] 1.6 В `bootstrap.dart` после инициализации ядра: при выключенном флаге и сохранённом `chain-status` не `off` сбросить настройку в `off`; если файл активного профиля не проходит `containsKeylessEgress`, снять с профиля активность; в обоих случаях отправить ядру актуальное состояние
+  - [x] 1.6a Сброс `chain-status` и отправка опций ядру — этап 3a (`resetDisabledChainStatus`, `lib/features/settings/data/chain_guard.dart`): сначала опции ядру, настройка пишется только при успехе
+  - [ ] 1.6b Снятие активности с WARP/Psiphon-профиля — этап 3b, нужен `containsKeylessEgress`
 
 ## 1a. Профили без ключа (WARP, Psiphon)
 
@@ -18,31 +20,33 @@
 
 ## 2. Диалог WARP
 
-- [ ] 2.1 Вынести условие в чистую функцию `requiresWarpConsent(SingboxConfigOption)`, учитывающую `chainStatus`
-- [ ] 2.2 Использовать её в `ConnectionRepository.applyConfigOption`
+- [x] 2.1 Вынести условие в чистую функцию `requiresWarpConsent(SingboxConfigOption)`, учитывающую `chainStatus`
+- [x] 2.2 Использовать её в `ConnectionRepository.applyConfigOption`
 
 ## 3. UI
 
-- [ ] 3.1 В `settings_page.dart` показывать раздел chain только при `kChainFeaturesEnabled`
-- [ ] 3.2 В `quick_settings_modal.dart` показывать `ChainQuickSettings` (и разделитель перед ним) только при `kChainFeaturesEnabled`
-- [ ] 3.3 В `routing_config_notifier.dart` регистрировать маршрут `chainOptions` и его redirect только при `kChainFeaturesEnabled`
+- [x] 3.1 В `settings_page.dart` показывать раздел chain только при `kChainFeaturesEnabled`
+- [x] 3.2 В `quick_settings_modal.dart` показывать `ChainQuickSettings` (и разделитель перед ним) только при `kChainFeaturesEnabled`
+- [x] 3.3 В `routing_config_notifier.dart` регистрировать маршрут `chainOptions` и его redirect только при `kChainFeaturesEnabled`
 
 ## 4. Тесты
 
-- [ ] 4.1 Фикстура `SingboxConfigOption` для тестов (JSON в `test/fixtures/` + `fromJson`)
-- [ ] 4.2 Unit: `ConfigOptionRepository.fullOptionsOverrided(null)` и `fullOptionsOverrided('{}')` при `chainStatus = extraSecurity` в исходных опциях → `off`
-- [ ] 4.3 Unit: `fullOptionsOverrided(profileOverride)` с переопределением `{"chain-status":"extra_security"}` → `off`
-- [ ] 4.4 Unit: `ProfileParser.profileOverride` с `enable-warp: true` в заголовках → нет `chain-status` и `extra-security`; с `UserOverride(enableWarp: true)` → то же
-- [ ] 4.5 Unit: `requiresWarpConsent` → `false` при `chainStatus = off` и `extraSecurity.mode = warp`; `true` при `chainStatus = extraSecurity` и `mode = warp`; `false` при `chainStatus = unblocker` и `unblocker.mode = psiphon`
-- [ ] 4.6 Unit или provider-тест: при `extraSecurityMode = warp` и `unblockerMode = psiphon` в собранных опциях `unblocker.mode == psiphon`
-- [ ] 4.7 Widget-тест `SettingsPage` (через `test/helpers/pump_app.dart`) с оверрайдом `hasAnyProfileProvider` → `true` (иначе пункт скрыт и без изменений): нет текста `t.pages.settings.chain.title`
+- [x] 4.1 Фикстура `SingboxConfigOption` для тестов (JSON в `test/fixtures/` + `fromJson`) — сделано фабрикой `test/helpers/config_options.dart`: опции собирает сам провайдер на моках, JSON-фикстура не нужна и не устареет (вариант из design.md, Risks)
+- [x] 4.2 Unit: `ConfigOptionRepository.fullOptionsOverrided(null)` и `fullOptionsOverrided('{}')` при `chainStatus = extraSecurity` в исходных опциях → `off`
+- [x] 4.3 Unit: `fullOptionsOverrided(profileOverride)` с переопределением `{"chain-status":"extra_security"}` → `off`
+- [x] 4.4 Unit: `ProfileParser.profileOverride` с `enable-warp: true` в заголовках → нет `chain-status` и `extra-security`; с `UserOverride(enableWarp: true)` → то же
+- [x] 4.5 Unit: `requiresWarpConsent` → `false` при `chainStatus = off` и `extraSecurity.mode = warp`; `true` при `chainStatus = extraSecurity` и `mode = warp`; `false` при `chainStatus = unblocker` и `unblocker.mode = psiphon`
+- [x] 4.6 Unit или provider-тест: при `extraSecurityMode = warp` и `unblockerMode = psiphon` в собранных опциях `unblocker.mode == psiphon`
+- [x] 4.7 Widget-тест `SettingsPage` (через `test/helpers/pump_app.dart`) с оверрайдом `hasAnyProfileProvider` → `true` (иначе пункт скрыт и без изменений): нет текста `t.pages.settings.chain.title`
 - [ ] 4.8 Unit `containsKeylessEgress` (фикстуры в `test.configs/warp`, `test.configs/warp2`): `warp://auto#WARP` → true; `psiphon://auto/` → true; base64 от строки с `warp://` → true; JSON с endpoint `type: warp` → true; JSON с outbound `type: psiphon` → true; `vless://…` → false; JSON, где `warp` только в поле `tag` → false
 - [ ] 4.9 Unit: bootstrap-логика сброса (вынесенная в функцию) при сохранённом `extraSecurity` записывает `off`, при `off` ничего не пишет; при активном профиле с `warp://` снимает активность, при `vless://` не трогает
+  - [x] 4.9a Сброс chain: `extraSecurity`/`unblocker` → `off` после успешной отправки ядру; при отказе или исключении ядра настройка сохраняется; при `off` и без сохранённого значения ядро не вызывается и ничего не пишется — этап 3a
+  - [ ] 4.9b Снятие активности с профиля `warp://` / сохранение `vless://` — этап 3b
 
 ## 5. Проверка
 
-- [ ] 5.1 `dart run build_runner build --delete-conflicting-outputs`
-- [ ] 5.2 CI зелёный: шаг `flutter analyze` (без ошибок) и `flutter test`
+- [x] 5.1 `dart run build_runner build --delete-conflicting-outputs` — этап 3a не меняет входов кодогенерации (freezed, `@riverpod`, drift, переводы); на 3b понадобится из-за новых вариантов ошибок
+- [x] 5.2 CI зелёный: шаг `flutter analyze` (без ошибок) и `flutter test` — MR #7, прогон 36014697769, плюс все 6 сборок
 - [ ] 5.3 Вручную: чистая установка → добавить ключ → подключиться. Диалог WARP не появляется, в настройках и быстрых настройках нет chain
 - [ ] 5.4 Вручную: быстрые настройки без Extra security / Unblocker / WARP / Psiphon
 - [ ] 5.5 Вручную: переход на `/settings/chain-options` (через `context.go` в debug-сборке) не открывает экран chain

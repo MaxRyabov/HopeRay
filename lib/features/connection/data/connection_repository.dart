@@ -10,10 +10,20 @@ import 'package:hiddify/features/profile/model/profile_entity.dart';
 import 'package:hiddify/features/settings/data/config_option_repository.dart';
 import 'package:hiddify/hiddifycore/hiddify_core_service.dart';
 import 'package:hiddify/singbox/model/core_status.dart';
+import 'package:hiddify/singbox/model/singbox_config_enum.dart';
 import 'package:hiddify/singbox/model/singbox_config_option.dart';
 import 'package:hiddify/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meta/meta.dart';
+
+/// Cloudflare WARP license consent is needed only if chain is on and its active stage goes through WARP.
+/// Stage modes are kept even with chain off (`extraSecurityMode` defaults to `warp`), so `mode` alone
+/// without `chainStatus` is not enough.
+bool requiresWarpConsent(SingboxConfigOption options) => switch (options.chainStatus) {
+  ChainStatus.off => false,
+  ChainStatus.extraSecurity => options.extraSecurity.mode.isWarp(),
+  ChainStatus.unblocker => options.unblocker.mode.isWarp(),
+};
 
 abstract interface class ConnectionRepository {
   SingboxConfigOption? get configOptionsSnapshot;
@@ -103,9 +113,7 @@ class ConnectionRepositoryImpl with ExceptionHandler, InfraLogger implements Con
           .flatMap(
             (overridedOptions) => TaskEither.tryCatch(() async {
               final isWarpLicenseAgreed = ref.read(Preferences.warpConsentGiven) == true;
-              final isWarpEnabled =
-                  overridedOptions.unblocker.mode.isWarp() || overridedOptions.extraSecurity.mode.isWarp();
-              if (!isWarpLicenseAgreed && isWarpEnabled) {
+              if (!isWarpLicenseAgreed && requiresWarpConsent(overridedOptions)) {
                 final isAgreed = await ref.read(dialogNotifierProvider.notifier).showWarpLicense();
                 if (isAgreed == true) {
                   await ref.read(Preferences.warpConsentGiven.notifier).update(true);

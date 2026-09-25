@@ -23,6 +23,11 @@ abstract class Constants {
 
 const kAnimationDuration = Duration(milliseconds: 250);
 
+/// Chain (Extra security over WARP, Unblocker over Psiphon) gives internet access without an issued key, so it is
+/// hidden. With `false` there are no UI entries or route, the core always gets `chainStatus = off`, and the stored
+/// choice is reset on launch. The chain code stays so the feature can be brought back.
+const kChainFeaturesEnabled = false;
+
 abstract class AddProfileModalConst {
   static const fixBtnsGap = 16.0;
   static const fixBtnsGapCount = 4;

@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:hiddify/core/db/db.dart';
 import 'package:hiddify/core/http_client/dio_http_client.dart';
+import 'package:hiddify/core/model/constants.dart';
 import 'package:hiddify/features/profile/data/profile_data_mapper.dart';
 import 'package:hiddify/features/profile/model/profile_entity.dart';
 import 'package:hiddify/features/profile/model/profile_failure.dart';
@@ -416,7 +417,12 @@ class ProfileParser {
   }) {
     final headers = Map<String, dynamic>.from(populatedHeaders ?? {});
 
-    if (headers['enable-warp'].toString() == 'true' || userOverride?.enableWarp == true) {
+    if (!kChainFeaturesEnabled) {
+      // Chain is hidden: neither the subscription nor the user can switch it on via profile overrides.
+      headers
+        ..remove('chain-status')
+        ..remove('extra-security');
+    } else if (headers['enable-warp'].toString() == 'true' || userOverride?.enableWarp == true) {
       headers['chain-status'] = 'extra_security';
       headers['extra-security'] = {'mode': 'warp'};
     }
