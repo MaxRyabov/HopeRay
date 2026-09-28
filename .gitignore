@@ -68,3 +68,5 @@ app.*.map.json
 # Windows Self-Signed for msix
 windows/sign.pfx
 windows/sign.cer
+# REALITY lab downloads (docs/reality-mlkem/lab/reality-lab.sh)
+.reality-lab/

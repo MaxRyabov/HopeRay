@@ -1,0 +1,152 @@
+diff --git a/common/tls/reality_client.go b/common/tls/reality_client.go
+index 9362d2f..deec541 100644
+--- a/common/tls/reality_client.go
++++ b/common/tls/reality_client.go
+@@ -30,7 +30,6 @@ import (
+ 	"github.com/sagernet/sing-box/adapter"
+ 	C "github.com/sagernet/sing-box/constant"
+ 	"github.com/sagernet/sing-box/option"
+-	"github.com/sagernet/sing/common"
+ 	"github.com/sagernet/sing/common/debug"
+ 	E "github.com/sagernet/sing/common/exceptions"
+ 	"github.com/sagernet/sing/common/logger"
+@@ -124,28 +123,11 @@ func (e *RealityClientConfig) ClientHandshake(ctx context.Context, conn net.Conn
+ 	uConfig.InsecureSkipVerify = true
+ 	uConfig.SessionTicketsDisabled = true
+ 	uConfig.VerifyPeerCertificate = verifier.VerifyPeerCertificate
+-	uConn := utls.UClient(conn, uConfig, e.uClient.id)
+-	verifier.UConn = uConn
+-	err := uConn.BuildHandshakeState()
+-	if err != nil {
+-		return nil, err
+-	}
+-	for _, extension := range uConn.Extensions {
+-		if ce, ok := extension.(*utls.SupportedCurvesExtension); ok {
+-			ce.Curves = common.Filter(ce.Curves, func(curveID utls.CurveID) bool {
+-				return curveID != utls.X25519MLKEM768
+-			})
+-		}
+-		if ks, ok := extension.(*utls.KeyShareExtension); ok {
+-			ks.KeyShares = common.Filter(ks.KeyShares, func(share utls.KeyShare) bool {
+-				return share.Group != utls.X25519MLKEM768
+-			})
+-		}
+-	}
+-	err = uConn.BuildHandshakeState()
++	uConn, err := realityUClient(conn, uConfig, e.uClient.id)
+ 	if err != nil {
+ 		return nil, err
+ 	}
++	verifier.UConn = uConn
+ 
+ 	if len(uConfig.NextProtos) > 0 {
+ 		for _, extension := range uConn.Extensions {
+@@ -168,9 +150,10 @@ func (e *RealityClientConfig) ClientHandshake(ctx context.Context, conn net.Conn
+ 	}
+ 	binary.BigEndian.PutUint64(hello.SessionId, uint64(nowTime.Unix()))
+ 
+-	hello.SessionId[0] = 1
+-	hello.SessionId[1] = 8
+-	hello.SessionId[2] = 1
++	// Report an Xray-core version: servers may enforce minClientVer (26.3.27 was a default in 26.x).
++	hello.SessionId[0] = 26
++	hello.SessionId[1] = 9
++	hello.SessionId[2] = 9
+ 	binary.BigEndian.PutUint32(hello.SessionId[4:], uint32(time.Now().Unix()))
+ 	copy(hello.SessionId[8:], e.shortID[:])
+ 	if debug.Enabled {
+@@ -185,6 +168,9 @@ func (e *RealityClientConfig) ClientHandshake(ctx context.Context, conn net.Conn
+ 		return nil, E.New("nil KeyShareKeys")
+ 	}
+ 	ecdheKey := keyShareKeys.Ecdhe
++	if ecdheKey == nil {
++		ecdheKey = keyShareKeys.MlkemEcdhe
++	}
+ 	if ecdheKey == nil {
+ 		return nil, E.New("nil ecdheKey")
+ 	}
+@@ -226,6 +212,42 @@ func (e *RealityClientConfig) ClientHandshake(ctx context.Context, conn net.Conn
+ 	return &realityClientConnWrapper{uConn}, nil
+ }
+ 
++// realityUClient builds the ClientHello that REALITY servers since Xray-core 26.9.8 require:
++// an X25519MLKEM768 key share placed before the optional X25519 one. Fingerprints that do not
++// carry it (firefox, safari, ... in metacubex/utls) fall back to chrome.
++func realityUClient(conn net.Conn, config *utls.Config, id utls.ClientHelloID) (*utls.UConn, error) {
++	uConn := utls.UClient(conn, config, id)
++	err := uConn.BuildHandshakeState()
++	if err != nil {
++		return nil, err
++	}
++	if realityHasMLKEMKeyShare(uConn) {
++		return uConn, nil
++	}
++	uConn = utls.UClient(conn, config, utls.HelloChrome_Auto)
++	err = uConn.BuildHandshakeState()
++	if err != nil {
++		return nil, err
++	}
++	return uConn, nil
++}
++
++func realityHasMLKEMKeyShare(uConn *utls.UConn) bool {
++	for _, extension := range uConn.Extensions {
++		if ks, ok := extension.(*utls.KeyShareExtension); ok {
++			for _, share := range ks.KeyShares {
++				if share.Group == utls.X25519MLKEM768 {
++					return true
++				}
++				if share.Group == utls.X25519 {
++					return false
++				}
++			}
++		}
++	}
++	return false
++}
++
+ func realityClientFallback(ctx context.Context, uConn net.Conn, serverName string, fingerprint utls.ClientHelloID) {
+ 	defer uConn.Close()
+ 	client := &http.Client{
+diff --git a/common/tls/reality_client_test.go b/common/tls/reality_client_test.go
+new file mode 100644
+index 0000000..c574b95
+--- /dev/null
++++ b/common/tls/reality_client_test.go
+@@ -0,0 +1,36 @@
++//go:build with_utls
++
++package tls
++
++import (
++	"net"
++	"testing"
++
++	utls "github.com/metacubex/utls"
++)
++
++// Xray-core 26.9.8+ rejects a REALITY ClientHello without X25519MLKEM768 before X25519.
++func TestRealityClientHelloHasMLKEM(t *testing.T) {
++	for _, name := range []string{"", "chrome", "firefox", "edge", "safari", "360", "qq", "ios", "android", "random", "randomized"} {
++		t.Run(name, func(t *testing.T) {
++			id, err := uTLSClientHelloID(name)
++			if err != nil {
++				t.Fatal(err)
++			}
++			conn, peer := net.Pipe()
++			defer conn.Close()
++			defer peer.Close()
++			uConn, err := realityUClient(conn, &utls.Config{ServerName: "example.com", InsecureSkipVerify: true}, id)
++			if err != nil {
++				t.Fatal(err)
++			}
++			if !realityHasMLKEMKeyShare(uConn) {
++				t.Fatal("no X25519MLKEM768 key share before X25519")
++			}
++			keys := uConn.HandshakeState.State13.KeyShareKeys
++			if keys == nil || (keys.Ecdhe == nil && keys.MlkemEcdhe == nil) {
++				t.Fatal("no X25519 private key for the REALITY auth key")
++			}
++		})
++	}
++}

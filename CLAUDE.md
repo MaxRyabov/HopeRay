@@ -16,6 +16,13 @@ IPC/service namespace `com.hiddify.app` are intentionally **not** renamed — se
 - **Version pin (strict):** `pubspec.yaml` declares `flutter: ^3.38.5` / Dart `^3.10.4`. The
   Flutter line is **parsed by the Makefile and Dockerfile** — do not remove or reformat it.
 
+## Active work
+
+- **REALITY vs Xray-core 26.9.8+** — HopeRay cannot connect to REALITY servers on Xray 26.9.8+
+  (the core strips X25519MLKEM768). The fix is a patched core fork. Plan, patch, lab script
+  and CI template: [`docs/reality-mlkem/PLAN.md`](docs/reality-mlkem/PLAN.md). Read it before
+  touching the core, `dependencies.properties` or `CORE_URL`.
+
 ## Build & codegen commands
 
 This project is **code-generation-heavy** — you cannot run or analyze it meaningfully until codegen

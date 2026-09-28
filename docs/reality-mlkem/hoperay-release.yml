@@ -1,0 +1,52 @@
+# Template for .github/workflows/hoperay-release.yml in the MaxRyabov/hiddify-core fork.
+# See docs/reality-mlkem/PLAN.md, stage 3.
+#
+# Builds the six hiddify-lib-* archives HopeRay downloads (android, ios, macos, windows-amd64,
+# linux-amd64, linux-arm64) with upstream's build.yml and publishes them as a release on the
+# pushed tag, e.g. v4.1.0-hr1. channel "dev" skips upstream's prod-only jobs (docker push to
+# ghcr.io/hiddify, OpenWrt hash commit to main, signed deb/rpm, CLI binaries), and
+# upload-artifact: false skips its floating "draft" release.
+name: HopeRay core release
+
+on:
+  push:
+    tags:
+      - 'v*-hr*'
+  # Re-run for an existing tag: pick the tag in "Use workflow from".
+  workflow_dispatch:
+
+permissions: write-all
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    with:
+      upload-artifact: false
+      tag-name: ${{ github.ref_name }}
+      channel: dev
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          pattern: hiddify-lib-*
+          path: bin/
+
+      - name: Check that all archives HopeRay needs are present
+        working-directory: bin
+        run: |
+          ls -la
+          for name in android ios macos windows-amd64 linux-amd64 linux-arm64; do
+            test -f "hiddify-lib-$name.tar.gz" || { echo "missing hiddify-lib-$name.tar.gz"; exit 1; }
+          done
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body: hiddify-core with the REALITY X25519MLKEM768 fix for HopeRay. See HopeRay docs/reality-mlkem/PLAN.md.
+          files: bin/*.tar.gz
